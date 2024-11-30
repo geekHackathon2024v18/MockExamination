@@ -1,5 +1,7 @@
 from datetime import datetime as dt
 from enum import Enum
+from TableInterface import TableInterface
+
 
 # 回答タイプの定義
 class QuestionType(Enum):
@@ -8,7 +10,7 @@ class QuestionType(Enum):
     DESCRIPTIVE = 3
 
 # 模擬試験の問いの情報を持つテーブル
-class Question:
+class Question(TableInterface):
     def __init__(self,
         mock_examination_id: int,
         question_sentence: str,
@@ -25,4 +27,14 @@ class Question:
         self.answer = answer
         self.created_at = created_at
         self.updated_at = updated_at
+    def getDictData(self) -> dict:
+        return {
+            "question_id": self.question_id,
+            "mock_examination_id": self.mock_examination_id,
+            "question_sentence": self.question_sentence,
+            "question_type": self.question_type,
+            "answer": self.answer,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }
 
