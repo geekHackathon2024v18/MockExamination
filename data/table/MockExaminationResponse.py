@@ -1,5 +1,6 @@
 from datetime import datetime as dt
-import TableInterface
+from TableInterface import TableInterface
+
 
 # 模擬試験の回答情報を持つテーブル
 class MockExaminationResponse(TableInterface):
