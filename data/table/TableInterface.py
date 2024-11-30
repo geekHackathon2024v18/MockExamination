@@ -1,4 +1,3 @@
-
 class TableInterface:
-    def getDictData() -> dict:
+    def getDictData(self) -> dict:
         pass
