@@ -14,13 +14,15 @@ class QuestionTable:
         question_sentence: str,
         question_type: QuestionType,
         answer: str,
-        question_id: int = None
+        question_id: int = None,
+        created_at: dt = dt.now(),
+        updated_at: dt = dt.now()
     ):
         self.question_id = question_id
         self.mock_examination_id = mock_examination_id
         self.question_sentence = question_sentence
         self.question_type = question_type
         self.answer = answer
-        self.created_at = dt.now()
-        self.updated_at = dt.now()
+        self.created_at = created_at
+        self.updated_at = updated_at
 
