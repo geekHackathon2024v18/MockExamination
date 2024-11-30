@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 
 # どんな模擬試験かの情報を持つテーブル
-class MockExaminationTable:
+class MockExamination:
     def __init__(self,
         subject_id: int,
         mock_examination_name: str,

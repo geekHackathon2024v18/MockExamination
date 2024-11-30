@@ -8,7 +8,7 @@ class QuestionType(Enum):
     DESCRIPTIVE = 3
 
 # 模擬試験の問いの情報を持つテーブル
-class QuestionTable:
+class Question:
     def __init__(self,
         mock_examination_id: int,
         question_sentence: str,

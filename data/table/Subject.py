@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 
 # 科目の情報を持つテーブル
-class SubjectTable:
+class Subject:
     def __init__(self,
         subject_name: str,
         subject_id: int = None,
