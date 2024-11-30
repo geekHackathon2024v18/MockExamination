@@ -14,7 +14,7 @@ class QuestionTable:
         question_sentence: str,
         question_type: QuestionType,
         answer: str,
-        question_id = None
+        question_id: int = None
     ):
         self.question_id = question_id
         self.mock_examination_id = mock_examination_id
