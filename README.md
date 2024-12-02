@@ -1,13 +1,43 @@
 # MockExamination
 
-## venvについて
+## 環境構築
 
-[参考](https://qiita.com/fiftystorm36/items/b2fd47cf32c7694adc2e)
+### 1.pipenvのインストール
 
-### 起動する時
+pipenvが入ってない場合はインストールする
 
-`.\venv\Scripts\activate` とコマンドラインで打つ。でpip installしなくても動く。はず
+入ってるかどうかの確認
 
-### 解除する時
+```shell-session
+$ pipenv --version
+```
 
-`deactivate`とコマンドラインで打つ
+バージョンが表示されなければ入ってないので次のコマンドを入力
+
+```shell-session
+$ pip pipenv install
+```
+
+### 2. 仮想環境上にpipenvでライブラリをインストール
+
+```shell-session
+$ pipenv install
+```
+
+[参考記事](https://qiita.com/y-tsutsu/items/54c10e0b2c6b565c887a)
+
+## 実行するとき
+
+実行する時、先ほどインストールしたライブラリはpipenvを起動することで読み込めるようになる
+
+### pipenvの起動
+
+```shell-session
+$ pipenv shell
+```
+
+### pipenvの終了
+
+```shell-session
+$ exit
+```
