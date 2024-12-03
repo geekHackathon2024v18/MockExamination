@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from ..database.sql_alchemy_control import Base
+from data.table.base import Base
 
 from enum import Enum
 

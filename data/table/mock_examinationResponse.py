@@ -8,9 +8,8 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from ..database.sql_alchemy_control import Base
-from data.table.mock_examination import MockExamination
-from data.table.question_response import QuestionResponse
+from data.table.base import Base
+
 
 
 # 模擬試験の回答情報を持つテーブル
