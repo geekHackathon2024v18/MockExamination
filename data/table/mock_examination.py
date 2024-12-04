@@ -24,9 +24,5 @@ class MockExamination(Base):
     updated_at: Mapped[dt] = mapped_column(default=dt.now())
     created_at: Mapped[dt] = mapped_column(default=dt.now(), onupdate=dt.now())
 
-    subject: Mapped["Subject"] = relationship(back_populates="MockExamination")
-    mock_examination_responses: Mapped[List["MockExaminationResponse"]] = relationship(back_populates="mock_examination", cascade="all, delete-orphan")
-    question: Mapped[List["Question"]] = relationship(back_populates="question", cascade="all, delete-orphan")
-
     def __repr__(self) -> str:
         return f"MockExamination(subject_id={self.subject_id!r}, mock_examination_name={self.mock_examination_name!r}, time_limit={self.time_limit!r}, mock_examination_id={self.mock_examination_id!r}, updated_at={self.updated_at!r}, created_at={self.created_at!r})"
