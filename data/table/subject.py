@@ -6,7 +6,6 @@ from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
 from datetime import datetime
 from data.table.base import Base
 
@@ -20,7 +19,6 @@ class Subject(Base):
     created_at: Mapped[dt] = mapped_column(default=dt.now())
     updated_at: Mapped[dt] = mapped_column(default=dt.now(), onupdate=dt.now())
 
-    MockExamination: Mapped[List["MockExamination"]] = relationship(back_populates="MockExamination", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"Subject(subject_id={self.subject_id!r}, subject_name={self.subject_name!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
