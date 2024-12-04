@@ -29,8 +29,6 @@ class Question(Base):
     created_at: Mapped[dt] = mapped_column(default=dt.now())
     updated_at: Mapped[dt] = mapped_column(default=dt.now(), onupdate=dt.now())
 
-    mock_examination: Mapped["MockExamination"] = relationship(back_populates="question")
-
     def __repr__(self) -> str:
         return f"Question(question_id={self.question_id!r}, mock_examination_id={self.mock_examination_id!r}, question_sentence={self.question_sentence!r}, question_type={self.question_type!r}, answer={self.answer!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
 
