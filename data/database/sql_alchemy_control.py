@@ -7,6 +7,14 @@ from data.table.question import Question
 from data.table.mock_examination_response import MockExaminationResponse
 from data.table.question_response import QuestionResponse
 from data.table.base import Base
+from typing import List
+
+# interface継承してカプセル化して、この部分に関してやり切りたい
+class SqlAlchemyControl:
+    def __init__(self) -> None:
+        self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
+        self.__session = Session(self.__engine)
+        self.insert = self.Insert(self.__session)
 
 # テーブル作成の関数
 def create_table(engine):
