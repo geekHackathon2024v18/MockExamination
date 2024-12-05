@@ -14,15 +14,15 @@ class SqlAlchemyControl:
     def __init__(self) -> None:
         self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
         self.__session = Session(self.__engine)
-        self.debug = self.DebugPrint(self.__session)
-        self.insert = self.Insert(self.__session)
-        self.read = self.Read(self.__session)
+        self.debug = self.__DebugPrint(self.__session)
+        self.insert = self.__Insert(self.__session)
+        self.read = self.__Read(self.__session)
 
     # テーブル作成の関数
     def create_table(self) -> None:
         Base.metadata.create_all(self.engine)
 
-    class DebugPrint:
+    class __DebugPrint:
         def __init__(self, session) -> None:
             self.__session = session
 
@@ -56,7 +56,7 @@ class SqlAlchemyControl:
                 for question_response in session.scalars(stmt):
                     print(question_response)
 
-    class Insert:
+    class __Insert:
         def __init__(self, session) -> None:
             self.__session = session
             self.question_list: list[Question] = []
@@ -183,7 +183,7 @@ class SqlAlchemyControl:
             )
             self.response_list = []
 
-    class Read:
+    class __Read:
         def __init__(self, session) -> None:
             self.__session = session
 
