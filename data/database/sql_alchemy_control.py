@@ -15,6 +15,7 @@ class SqlAlchemyControl:
         self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
         self.__session = Session(self.__engine)
         self.insert = self.Insert(self.__session)
+        self.read = self.Read(self.__session)
 
     # テーブル作成の関数
     def create_table(self) -> None:
@@ -159,22 +160,90 @@ class SqlAlchemyControl:
             )
             self.response_list = []
 
+    class Read:
+        def __init__(self, session) -> None:
+            self.__session = session
+
+        # 科目の保存データ全てを取得
+        def subject(self) -> List[Subject]:
+            stmt = select(Subject)
+            return self.__session.execute(stmt).scalars().all()
+
+        # 科目の保存データをid指定で取得
+        def subject_by_id(self, id: int) -> Subject:
+            stmt = select(Subject).where(Subject.subject_id == id)
+            return self.__session.execute(stmt).scalars().one()
+
+        # 模擬試験の保存データ全てを取得
+        def mock_examination(self) -> list[MockExamination]:
+            stmt = select(MockExamination)
+            return self.__session.execute(stmt).scalars().all()
+        # 模擬試験の保存データをid指定で取得
+        def mock_examination_by_id(self, id: int) -> MockExamination:
+            stmt = select(MockExamination).where(MockExamination.mock_examination_id == id)
+            return self.__session.execute(stmt).scalars().one()
+
+        # 問題の保存データ全てを取得
+        def question(self, mock_examination_id: int) -> list[Question]:
+            stmt = select(Question).where(Question.mock_examination_id == mock_examination_id)
+            return self.__session.execute(stmt).scalars().all()
+
+        # 問題の保存データをid指定で取得
+        def question_by_id(self,
+                mock_examination_id: int,
+                question_id: int
+            ) -> Question:
+            stmt = select(Question).\
+                where(Question.mock_examination_id == mock_examination_id).\
+                where(Question.question_id == question_id)
+            return self.__session.execute(stmt).scalars().one()
+
+        # 模擬試験の回答の保存データ全てを取得
+        def mock_examination_response(self) -> list[MockExaminationResponse]:
+            stmt = select(MockExaminationResponse)
+            return self.__session.execute(stmt).scalars().all()
+
+        # 模擬試験の回答の保存データをid指定で取得
+        def mock_examination_response_by_id(self, id: int) -> MockExaminationResponse:
+            stmt = select(MockExaminationResponse).where(MockExaminationResponse.mock_examination_response_id == id)
+            return self.__session.execute(stmt).scalars().one()
+
+        # 問題の回答の保存データ全てを取得
+        def question_response(self, mock_examination_response_id: int) -> list[QuestionResponse]:
+            stmt = select(QuestionResponse).\
+                where(QuestionResponse.mock_examination_response_id == mock_examination_response_id)
+            return self.__session.execute(stmt).scalars().all()
+
+        # 問題の解答の保存データをid指定で取得
+        def question_response_by_id(self,
+            mock_examination_response_id: int,
+            question_response_id: int,
+        ) -> QuestionResponse:
+            stmt = select(QuestionResponse).\
+                where(QuestionResponse.mock_examination_response_id == mock_examination_response_id).\
+                where(QuestionResponse.question_response_id == question_response_id)
+            return self.__session.execute(stmt).scalars.one()
+
+
+
+
+
 
     # オブジェクト取得の関数
-    def get_object(self, table_type: tableType, id: int):
-        with self.__session as session:
-            if table_type == tableType.SUBJECT:
-                return session.execute(select(Subject)).scalars().all()
-            elif table_type == tableType.MOCK_EXAMINATION:
-                return session.get(MockExamination, id)
-            elif table_type == tableType.QUESTION:
-                return session.get(Question, id)
-            elif table_type == tableType.MOCK_EXAMINATION_RESPONSE:
-                return session.get(MockExaminationResponse, id)
-            elif table_type == tableType.QUESTION_RESPONSE:
-                return session.get(QuestionResponse, id)
-            else:
-                return None
+    # def get_object(self, table_type: tableType, id: int):
+    #     with self.__session as session:
+    #         if table_type == tableType.SUBJECT:
+    #             return session.execute(select(Subject)).scalars().all()
+    #         elif table_type == tableType.MOCK_EXAMINATION:
+    #             return session.get(MockExamination, id)
+    #         elif table_type == tableType.QUESTION:
+    #             return session.get(Question, id)
+    #         elif table_type == tableType.MOCK_EXAMINATION_RESPONSE:
+    #             return session.get(MockExaminationResponse, id)
+    #         elif table_type == tableType.QUESTION_RESPONSE:
+    #             return session.get(QuestionResponse, id)
+    #         else:
+    #             return None
 
     # デバッグ用の関数
     def main(self):
