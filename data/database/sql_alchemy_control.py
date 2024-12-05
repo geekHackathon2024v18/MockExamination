@@ -12,6 +12,7 @@ from data.table.base import Base
 def create_table(engine):
     Base.metadata.create_all(engine)
 
+# オブジェクト追加の関数
 def insert_object(engine, obj):
     with Session(engine) as session:
         add_obj = obj
@@ -22,9 +23,11 @@ engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
 
 # create_table(engine)
 
+# subjectテーブル追加の例
 # insert_object(
 #     engine = engine,
 #     obj = Subject(
 #         subject_name = "線形代数"
 #     )
 # )
+
