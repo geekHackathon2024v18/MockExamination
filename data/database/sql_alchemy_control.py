@@ -16,9 +16,30 @@ class SqlAlchemyControl:
         self.__session = Session(self.__engine)
         self.insert = self.Insert(self.__session)
 
-# テーブル作成の関数
-def create_table(engine):
-    Base.metadata.create_all(engine)
+    # テーブル作成の関数
+    def create_table(self) -> None:
+        Base.metadata.create_all(self.engine)
+
+    class Insert:
+        def __init__(self, session) -> None:
+            self.__session = session
+            self.question_list: list[Question] = []
+            self.response_list: list[QuestionResponse] = []
+
+        # insertテンプレート関数
+        def __insert_subject(self, obj) -> None:
+            with self.__session as session:
+                if type(obj) == list:
+                    session.add_all(obj)
+                else:
+                    session.add(obj)
+                session.commit()
+
+        # 科目の情報を追加の関数
+        def subject(self, subject_name: str) -> None:
+            #型チェック
+            if not isinstance(subject_name, str):
+                raise TypeError("subject_name must be str")
 
 # オブジェクト追加の関数
 def insert_object(engine, obj):
