@@ -3,16 +3,17 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from data.table.subject import Subject
 from data.table.mock_examination import MockExamination
-from data.table.question import Question
+from data.table.question import Question, QuestionType
 from data.table.mock_examination_response import MockExaminationResponse
 from data.table.question_response import QuestionResponse
 from data.table.base import Base
 from typing import List
+import time
 
 # interface継承してカプセル化して、この部分に関してやり切りたい
 class SqlAlchemyControl:
     def __init__(self) -> None:
-        self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
+        self.__engine = create_engine("sqlite:///data/database/sample.db", echo=True, future=True)
         self.__session = Session(self.__engine)
         self.debug = self.__DebugPrint(self.__session)
         self.insert = self.__Insert(self.__session)
@@ -29,31 +30,41 @@ class SqlAlchemyControl:
         def subject(self) -> None:
             with self.__session as session:
                 stmt = select(Subject)
-                for subject in session.scalars(stmt):
+                for subject in session.scalars(stmt).all():
                     print(subject)
 
-        def mock_examination(self) -> None:
+        def mock_examination(self, subject_id: int) -> None:
             with self.__session as session:
-                stmt = select(MockExamination)
-                for mock_examination in session.scalars(stmt):
+                stmt = select(MockExamination).where(MockExamination.subject_id == subject_id)
+                for mock_examination in session.scalars(stmt).all():
                     print(mock_examination)
 
         def question(self, mock_examination_id: int) -> None:
             with self.__session as session:
                 stmt = select(Question).where(Question.mock_examination_id == mock_examination_id)
-                for question in session.scalars(stmt):
+                questions = session.scalars(stmt).all()
+                if len(questions) == 0:
+                    print("問題がありません")
+                else :
+                    print(len(questions))
+                for question in questions:
+                    print(question)
+        def question_all(self) -> None:
+            with self.__session as session:
+                stmt = select(Question)
+                for question in session.scalars(stmt).all():
                     print(question)
 
         def mock_examination_response(self, mock_examination_id: int) -> None:
             with self.__session as session:
                 stmt = select(MockExaminationResponse).where(MockExaminationResponse.mock_examination_id == mock_examination_id)
-                for mock_examination_response in session.scalars(stmt):
+                for mock_examination_response in session.scalars(stmt).all():
                     print(mock_examination_response)
 
         def question_response(self, mock_examination_response_id: int) -> None:
             with self.__session as session:
                 stmt = select(QuestionResponse).where(QuestionResponse.mock_examination_response_id == mock_examination_response_id)
-                for question_response in session.scalars(stmt):
+                for question_response in session.scalars(stmt).all():
                     print(question_response)
 
     class __Insert:
@@ -63,7 +74,7 @@ class SqlAlchemyControl:
             self.response_list: list[QuestionResponse] = []
 
         # insertテンプレート関数
-        def __insert_subject(self, obj) -> None:
+        def __insert_subject(self, obj) -> int:
             with self.__session as session:
                 if type(obj) == list:
                     session.add_all(obj)
@@ -77,15 +88,13 @@ class SqlAlchemyControl:
             if not isinstance(subject_name, str):
                 raise TypeError("subject_name must be str")
 
-            with self.__session as session:
-                subject = Subject(subject_name=subject_name)
-                session.add(subject)
-                session.commit()
+            self.__insert_subject(Subject(subject_name=subject_name))
+
 
         def question_stack(self,
             mock_examination_id: int,
             question_sentence: str,
-            question_type: int,
+            question_type: QuestionType,
             answer: str
         ) -> None:
             # 型チェック
@@ -93,8 +102,8 @@ class SqlAlchemyControl:
                 raise TypeError("mock_examination_idはint型で入れてね")
             if not isinstance(question_sentence, str):
                 raise TypeError("question_sentenceはstr型で入れてね")
-            if not isinstance(question_type, int):
-                raise TypeError("question_typeはint型で入れてね")
+            if not isinstance(question_type, QuestionType):
+                raise TypeError("question_typeはQuestionType型で入れてね")
             if not isinstance(answer, str):
                 raise TypeError("answerはstr型で入れてね")
 
@@ -125,15 +134,35 @@ class SqlAlchemyControl:
                 raise TypeError("time_limitはint型で入れてね")
             if time_limit != None and time_limit < 0:
                     raise ValueError("time_limitは0以上で入れてね")
-            self.__insert_subject(
-                self.question_list + [
-                    MockExamination(
-                        subject_id=subject_id,
-                        mock_examination_name=mock_examination_name,
-                        time_limit=time_limit
-                    )
-                ]
+            # self.__insert_subject(
+            #     self.question_list + [
+            #         MockExamination(
+            #             subject_id=subject_id,
+            #             mock_examination_name=mock_examination_name,
+            #             time_limit=time_limit
+            #         )
+            #     ]
+            # )
+            mock_examination_obj = MockExamination(
+                subject_id=subject_id,
+                mock_examination_name=mock_examination_name,
+                time_limit=time_limit
             )
+            self.__insert_subject(mock_examination_obj)
+            print(mock_examination_obj.mock_examination_id)
+            # for question in self.question_stack:
+            #     question.mock_examination_id = mock_examination_obj.mock_examination_id
+            # self.__insert_subject(
+            #     self.question_list + [
+            #         Question(
+            #             mock_examination_id=mock_examination_obj.mock_examination_id,
+            #             question_sentence=question.question_sentence,
+            #             question_type=question.question_type,
+            #             answer=question.answer
+            #         )
+            #         for question in self.question_list
+            #     ]
+            # )
             self.question_list = []
 
         # 問題の回答をスタックする関数
