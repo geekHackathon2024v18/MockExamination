@@ -14,12 +14,47 @@ class SqlAlchemyControl:
     def __init__(self) -> None:
         self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
         self.__session = Session(self.__engine)
+        self.debug = self.DebugPrint(self.__session)
         self.insert = self.Insert(self.__session)
         self.read = self.Read(self.__session)
 
     # テーブル作成の関数
     def create_table(self) -> None:
         Base.metadata.create_all(self.engine)
+
+    class DebugPrint:
+        def __init__(self, session) -> None:
+            self.__session = session
+
+        def subject(self) -> None:
+            with self.__session as session:
+                stmt = select(Subject)
+                for subject in session.scalars(stmt):
+                    print(subject)
+
+        def mock_examination(self) -> None:
+            with self.__session as session:
+                stmt = select(MockExamination)
+                for mock_examination in session.scalars(stmt):
+                    print(mock_examination)
+
+        def question(self, mock_examination_id: int) -> None:
+            with self.__session as session:
+                stmt = select(Question).where(Question.mock_examination_id == mock_examination_id)
+                for question in session.scalars(stmt):
+                    print(question)
+
+        def mock_examination_response(self, mock_examination_id: int) -> None:
+            with self.__session as session:
+                stmt = select(MockExaminationResponse).where(MockExaminationResponse.mock_examination_id == mock_examination_id)
+                for mock_examination_response in session.scalars(stmt):
+                    print(mock_examination_response)
+
+        def question_response(self, mock_examination_response_id: int) -> None:
+            with self.__session as session:
+                stmt = select(QuestionResponse).where(QuestionResponse.mock_examination_response_id == mock_examination_response_id)
+                for question_response in session.scalars(stmt):
+                    print(question_response)
 
     class Insert:
         def __init__(self, session) -> None:
@@ -127,34 +162,22 @@ class SqlAlchemyControl:
         # 模擬試験の回答を追加する関数
         def mock_examination_response(self,
             mock_examination_id: int,
-            user_id: int,
-            score: int,
-            time: int
-        ):
+            interruption: bool,
+        ) -> None:
             # 型チェック
             if not isinstance(mock_examination_id, int):
                 raise TypeError("mock_examination_idはint型で入れてね")
-            if not isinstance(user_id, int):
-                raise TypeError("user_idはint型で入れてね")
-            if not isinstance(score, int):
-                raise TypeError("scoreはint型で入れてね")
-            if not isinstance(time, int):
-                raise TypeError("timeはint型で入れてね")
-            if score < 0:
-                raise ValueError("scoreは0以上で入れてね")
-            if time < 0:
-                raise ValueError("timeは0以上で入れてね")
+            if not isinstance(interruption, bool):
+                raise TypeError("interruptionはbool型で入れてね")
 
             if len(self.response_list) == 0:
-                # すでに追加されている問題の数分、未回答として追加する
-                pass
+                raise ValueError("insert.question_response_stack()で回答を入れてから実行してね")
+
             self.__insert_subject(
                 self.response_list + [
                     MockExaminationResponse(
                         mock_examination_id=mock_examination_id,
-                        user_id=user_id,
-                        score=score,
-                        time=time
+                        interruption=interruption
                     )
                 ]
             )
