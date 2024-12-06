@@ -270,10 +270,36 @@ class SqlAlchemyControl:
             subject_name:str
         ) -> None:
             with self.__session as session:
-                subject = session.get(Subject, subject_id)
-                subject.subject_name = subject_name
+                obj = session.get(Subject, subject_id)
+                obj.subject_name = subject_name
 
                 session.commit()
+
+        def mock_examination(self,
+            mock_examination_id: int,
+            mock_examination_name: str,
+            time_limit: int = None,
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(MockExamination, mock_examination_id)
+                obj.mock_examination_name = mock_examination_name
+                obj.time_limit = time_limit
+
+                session.commit()
+
+        def question(self,
+            question_id: int,
+            question_sentence: str,
+            question_type: QuestionType,
+            answer: str
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(Question, question_id)
+                obj.question_sentence = question_sentence
+                obj.question_type = question_type
+                obj.answer = answer
+                session.commit()
+
 
 
     class __Delete:
@@ -284,6 +310,18 @@ class SqlAlchemyControl:
             with self.__session as session:
                 subject = session.get(Subject, subject_id)
                 session.delete(subject)
+                session.commit()
+
+        def mock_examination_by_id(self, mock_examination_id: int) -> None:
+            with self.__session as session:
+                obj = session.get(MockExamination, mock_examination_id)
+                session.delete(obj)
+                session.commit()
+
+        def question_by_id(self, question_id: int) -> None:
+            with self.__session as session:
+                obj = session.get(Question, question_id)
+                session.delete(obj)
                 session.commit()
 
 
