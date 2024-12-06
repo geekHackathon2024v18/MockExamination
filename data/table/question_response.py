@@ -14,9 +14,9 @@ from data.table.base import Base
 class QuestionResponse(Base):
     __tablename__ = "question_response"
     id: Mapped[int] = mapped_column(primary_key=True)
-    mock_examination_id: Mapped[int] = mapped_column(ForeignKey("mock_examination.mock_examination_id"))
+    mock_examination_id: Mapped[int] = mapped_column(ForeignKey("mock_examination.id"))
     mock_examination_response_id: Mapped[int] = mapped_column(ForeignKey("mock_examination_response.id"))
-    question_id: Mapped[int] = mapped_column(ForeignKey("question.question_id"))
+    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"))
     response_content: Mapped[str]
     correction: Mapped[bool]
     created_at: Mapped[dt] = mapped_column(default=dt.now())

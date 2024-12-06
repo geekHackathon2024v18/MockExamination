@@ -21,7 +21,7 @@ class SqlAlchemyControl:
 
     # テーブル作成の関数
     def create_table(self) -> None:
-        Base.metadata.create_all(self.engine)
+        Base.metadata.create_all(self.__engine)
 
     class __DebugPrint:
         def __init__(self, session) -> None:
