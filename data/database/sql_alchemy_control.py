@@ -300,6 +300,35 @@ class SqlAlchemyControl:
                 obj.answer = answer
                 session.commit()
 
+        def mock_examination_response(self,
+            mock_examination_response_id: int,
+            mock_examination_id: int,
+            interruption: bool,
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(MockExaminationResponse, mock_examination_response_id)
+                obj.mock_examination_id = mock_examination_id
+                obj.interruption = interruption
+                session.commit()
+
+        def question_response(self,
+            question_response_id: int,
+            mock_examination_id: int,
+            mock_examination_response_id:int,
+            question_id: int,
+            response_content: str,
+            correction: str
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(QuestionResponse, question_response_id)
+                obj.mock_examination_id = mock_examination_id
+                obj.mock_examination_response_id = mock_examination_response_id
+                obj.question_id = question_id
+                obj.response_content = response_content
+                obj.correction = correction
+                session.commit()
+
+
 
 
     class __Delete:
@@ -324,20 +353,15 @@ class SqlAlchemyControl:
                 session.delete(obj)
                 session.commit()
 
+        def mock_examination_response_by_id(self, mock_examination_response_id: int) -> None:
+            with self.__session as session:
+                obj = session.get(MockExaminationResponse, mock_examination_response_id)
+                session.delete(obj)
+                session.commit()
 
-    # デバッグ用の関数
-    def main(self):
-        # シンプルなセレクト
-        stmt = select(Subject)
-        for subject in self.__session.execute(stmt).scalars():
-            print(subject)
+        def question_response_by_id(self, question_response_id: int) -> None:
+            with self.__session as session:
+                obj = session.get(QuestionResponse, question_response_id)
+                session.delete(obj)
+                session.commit()
 
-
-
-# # subjectオブジェクト削除の関数
-# def delete_subject_object_by_id(engine, subject_id: int):
-#     with Session(engine) as session:
-#         session.query(Subject).\
-#             filter(Subject.subject_id==subject_id).\
-#             delete()
-#         session.commit()
