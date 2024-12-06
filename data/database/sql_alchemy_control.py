@@ -101,8 +101,6 @@ class SqlAlchemyControl:
             answer: str
         ) -> None:
             # 型チェック
-            if not isinstance(mock_examination_id, int):
-                raise TypeError("mock_examination_idはint型で入れてね")
             if not isinstance(question_sentence, str):
                 raise TypeError("question_sentenceはstr型で入れてね")
             if not isinstance(question_type, QuestionType):
