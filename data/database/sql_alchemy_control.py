@@ -74,7 +74,7 @@ class SqlAlchemyControl:
             self.response_list: list[QuestionResponse] = []
 
         # insertテンプレート関数
-        def __insert_subject(self, obj) -> int:
+        def __insert_obj(self, obj) -> int:
             with self.__session as session:
                 if type(obj) == list:
                     session.add_all(obj)
@@ -88,7 +88,7 @@ class SqlAlchemyControl:
             if not isinstance(subject_name, str):
                 raise TypeError("subject_name must be str")
 
-            self.__insert_subject(Subject(subject_name=subject_name))
+            self.__insert_obj(Subject(subject_name=subject_name))
 
 
         def question_stack(self,
@@ -134,7 +134,7 @@ class SqlAlchemyControl:
                 raise TypeError("time_limitはint型で入れてね")
             if time_limit != None and time_limit < 0:
                     raise ValueError("time_limitは0以上で入れてね")
-            # self.__insert_subject(
+            # self.__insert_obj(
             #     self.question_list + [
             #         MockExamination(
             #             subject_id=subject_id,
@@ -148,11 +148,11 @@ class SqlAlchemyControl:
                 mock_examination_name=mock_examination_name,
                 time_limit=time_limit
             )
-            self.__insert_subject(mock_examination_obj)
+            self.__insert_obj(mock_examination_obj)
             print(mock_examination_obj.mock_examination_id)
             # for question in self.question_stack:
             #     question.mock_examination_id = mock_examination_obj.mock_examination_id
-            # self.__insert_subject(
+            # self.__insert_obj(
             #     self.question_list + [
             #         Question(
             #             mock_examination_id=mock_examination_obj.mock_examination_id,
@@ -202,7 +202,7 @@ class SqlAlchemyControl:
             if len(self.response_list) == 0:
                 raise ValueError("insert.question_response_stack()で回答を入れてから実行してね")
 
-            self.__insert_subject(
+            self.__insert_obj(
                 self.response_list + [
                     MockExaminationResponse(
                         mock_examination_id=mock_examination_id,
