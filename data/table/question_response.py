@@ -15,6 +15,7 @@ class QuestionResponse(Base):
     __tablename__ = "question_response"
     id: Mapped[int] = mapped_column(primary_key=True)
     mock_examination_response_id: Mapped[int] = mapped_column(ForeignKey("mock_examination_response.id"))
+    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"))
     response_content: Mapped[str]
     created_at: Mapped[dt] = mapped_column(default=dt.now())
     updated_at: Mapped[dt] = mapped_column(default=dt.now(), onupdate=dt.now())
