@@ -75,12 +75,16 @@ class SqlAlchemyControl:
 
         # insertテンプレート関数
         def __insert_obj(self, obj) -> int:
+            id = None
             with self.__session as session:
                 if type(obj) == list:
                     session.add_all(obj)
                 else:
                     session.add(obj)
                 session.commit()
+                id = obj.id
+            return id
+
 
         # 科目の情報を追加の関数
         def subject(self, subject_name: str) -> None:
