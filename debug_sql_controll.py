@@ -79,4 +79,55 @@ database = SqlAlchemyControl()
 #     interruption=False
 # )
 # [print(i) for i in database.read.mock_examination_response()]
-[print(i) for i in database.read.question_response(mock_examination_response_id=1)]
+# [print(i) for i in database.read.question_response(mock_examination_response_id=1)]
+
+
+# # mock_examinationとquestionテーブルの操作
+
+# insert_question_stack = [
+#     {
+#         "question_sentence": "サンプルの問題1の問題文です",
+#         "question_type": QuestionType.DESCRIPTIVE,
+#         "answer": "サンプルの問題1の答え"
+#     },
+#     {
+#         "question_sentence": "サンプルの問題2の問題文です",
+#         "question_type": QuestionType.DESCRIPTIVE,
+#         "answer": "サンプルの問題2の答え"
+#     },
+# ]
+
+# for insert_question in insert_question_stack:
+#     database.insert.question_stack(
+#         question_sentence=insert_question["question_sentence"],
+#         question_type=insert_question["question_type"],
+#         answer=insert_question["answer"]
+
+#     )
+# database.insert.mock_examination(
+#     subject_id=1,
+#     mock_examination_name="削除と編集を検証するサンプルの問題",
+#     time_limit=50
+# )
+# obj = database.read.mock_examination_by_id(id=4)
+# database.update.mock_examination(
+#     mock_examination_id=4,
+#     mock_examination_name="編集は検証しました",
+#     time_limit=obj.time_limit
+# )
+
+obj = database.read.question_by_id(question_id=8)
+database.update.question(
+    question_id=8,
+    question_sentence="変更しました",
+    question_type=obj.question_type,
+    answer="変更しました"
+)
+
+
+# 出力
+for mock_examination in database.read.mock_examination():
+    print(mock_examination)
+    print("question ↓")
+    [print(question) for question in database.read.question(mock_examination_id=mock_examination.id)]
+
