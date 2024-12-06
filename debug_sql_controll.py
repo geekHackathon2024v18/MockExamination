@@ -45,4 +45,38 @@ database = SqlAlchemyControl()
 # )
 
 # [print(i) for i in database.read.mock_examination()]
-[print(i) for i in database.read.question(mock_examination_id=3)]
+# [print(i) for i in database.read.question(mock_examination_id=3)]
+
+
+# mock_examination_responseの追加
+# insert_question_responses = [
+#     {
+#     "question_id": 1,
+#     "response_content": "答え1",
+#     "correction": True
+#     },
+#     {
+#     "question_id": 2,
+#     "response_content": "答え2",
+#     "correction": False
+#     },
+#     {
+#     "question_id": 3,
+#     "response_content": "答え3",
+#     "correction": True
+#     }
+# ]
+
+# for insert_question_response in insert_question_responses:
+#     database.insert.question_response_stack(
+#         question_id=insert_question_response["question_id"],
+#         response_content=insert_question_response["response_content"],
+#         correction=insert_question_response["correction"]
+#     )
+
+# database.insert.mock_examination_response(
+#     mock_examination_id=2,
+#     interruption=False
+# )
+# [print(i) for i in database.read.mock_examination_response()]
+[print(i) for i in database.read.question_response(mock_examination_response_id=1)]
