@@ -96,7 +96,6 @@ class SqlAlchemyControl:
 
 
         def question_stack(self,
-            mock_examination_id: int,
             question_sentence: str,
             question_type: QuestionType,
             answer: str
@@ -113,7 +112,7 @@ class SqlAlchemyControl:
 
             self.question_list.append(
                 Question(
-                    mock_examination_id=mock_examination_id,
+                    mock_examination_id=None,
                     question_sentence=question_sentence,
                     question_type=question_type,
                     answer=answer
@@ -152,21 +151,11 @@ class SqlAlchemyControl:
                 mock_examination_name=mock_examination_name,
                 time_limit=time_limit
             )
-            self.__insert_obj(mock_examination_obj)
-            print(mock_examination_obj.mock_examination_id)
-            # for question in self.question_stack:
-            #     question.mock_examination_id = mock_examination_obj.mock_examination_id
-            # self.__insert_obj(
-            #     self.question_list + [
-            #         Question(
-            #             mock_examination_id=mock_examination_obj.mock_examination_id,
-            #             question_sentence=question.question_sentence,
-            #             question_type=question.question_type,
-            #             answer=question.answer
-            #         )
-            #         for question in self.question_list
-            #     ]
-            # )
+            mock_examination_id = self.__insert_obj(mock_examination_obj)
+
+            for question in self.question_stack:
+                question.mock_examination_id = mock_examination_id
+            self.__insert_obj(self.question_list)
             self.question_list = []
 
         # 問題の回答をスタックする関数
