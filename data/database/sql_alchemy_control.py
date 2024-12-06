@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, select, update
 from sqlalchemy.orm import Session
 from datetime import datetime
 from data.table.subject import Subject
@@ -18,6 +18,8 @@ class SqlAlchemyControl:
         self.debug = self.__DebugPrint(self.__session)
         self.insert = self.__Insert(self.__session)
         self.read = self.__Read(self.__session)
+        self.update = self.__Update(self.__session)
+        self.delete = self.__Delete(self.__session)
 
     # テーブル作成の関数
     def create_table(self) -> None:
@@ -186,7 +188,7 @@ class SqlAlchemyControl:
 
             if len(self.response_list) == 0:
                 raise ValueError("insert.question_response_stack()で回答を入れてから実行してね")
-            
+
             mock_examination_response_id = self.__insert_obj(MockExaminationResponse(
                 mock_examination_id=mock_examination_id,
                 interruption=interruption
@@ -258,6 +260,31 @@ class SqlAlchemyControl:
             stmt = select(QuestionResponse).\
                 where(QuestionResponse.id == question_response_id)
             return self.__session.execute(stmt).scalars.one()
+
+    class __Update:
+        def __init__(self, session) -> None:
+            self.__session = session
+
+        def subject(self,
+            subject_id: int,
+            subject_name:str
+        ) -> None:
+            with self.__session as session:
+                subject = session.get(Subject, subject_id)
+                subject.subject_name = subject_name
+
+                session.commit()
+
+
+    class __Delete:
+        def __init__(self, session) -> None:
+            self.__session = session
+
+        def subject_by_id(self, subject_id: int) -> None:
+            with self.__session as session:
+                subject = session.get(Subject, subject_id)
+                session.delete(subject)
+                session.commit()
 
 
     # デバッグ用の関数
