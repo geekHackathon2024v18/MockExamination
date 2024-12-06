@@ -4,14 +4,14 @@ from data.table.subject import Subject
 from data.table.question import QuestionType
 
 database = SqlAlchemyControl()
-database.create_table()
+# database.create_table()
 # database.debug.mock_examination(subject_id=7)
 # print(database.read.subject())
 # mock1 = database.read.mock_examination_by_id(id=1)
 # print(mock1)
 
 # subjectの追加
-# database.insert.subject(subject_name="mock_subject")
+# database.insert.subject(subject_name="mock_subject1")
 # print(database.read.subject())
 
 # mock_examinationの追加
@@ -46,7 +46,7 @@ database.create_table()
 # )
 
 # [print(i) for i in database.read.mock_examination()]
-# [print(i) for i in database.read.question(mock_examination_id=3)]
+# [print(i) for i in database.read.question(mock_examination_id=1)]
 
 
 # mock_examination_responseの追加
@@ -54,17 +54,14 @@ database.create_table()
 #     {
 #     "question_id": 1,
 #     "response_content": "答え1",
-#     "correction": True
 #     },
 #     {
 #     "question_id": 2,
 #     "response_content": "答え2",
-#     "correction": False
 #     },
 #     {
 #     "question_id": 3,
 #     "response_content": "答え3",
-#     "correction": True
 #     }
 # ]
 
@@ -72,11 +69,10 @@ database.create_table()
 #     database.insert.question_response_stack(
 #         question_id=insert_question_response["question_id"],
 #         response_content=insert_question_response["response_content"],
-#         correction=insert_question_response["correction"]
 #     )
 
 # database.insert.mock_examination_response(
-#     mock_examination_id=2,
+#     mock_examination_id=1,
 #     interruption=False
 # )
 # [print(i) for i in database.read.mock_examination_response()]
