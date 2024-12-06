@@ -4,13 +4,16 @@ from data.table.subject import Subject
 from data.table.question import QuestionType
 
 database = SqlAlchemyControl()
-database.create_table()
 # database.debug.mock_examination(subject_id=7)
-# database.debug.question_all()
+# print(database.read.subject())
 # mock1 = database.read.mock_examination_by_id(id=1)
 # print(mock1)
 
+# subjectの追加
+# database.insert.subject(subject_name="mock_subject")
+# print(database.read.subject())
 
+# mock_examinationの追加
 # insert_questions = [
 #     {
 #     "question_sentence": "問題文1",
@@ -31,13 +34,15 @@ database.create_table()
 
 # for insert_question in insert_questions:
 #     database.insert.question_stack(
-#         mock_examination_id=,
 #         question_sentence=insert_question["question_sentence"],
 #         question_type=insert_question["question_type"],
 #         answer=insert_question["answer"]
 #     )
 
 # database.insert.mock_examination(
-#     subject_id=7,
-#     mock_examination_name="db検証: 模擬試験2",
+#     subject_id=1,
+#     mock_examination_name="mock_examination",
 # )
+
+# [print(i) for i in database.read.mock_examination()]
+[print(i) for i in database.read.question(mock_examination_id=3)]
