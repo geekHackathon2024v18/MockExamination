@@ -137,15 +137,7 @@ class SqlAlchemyControl:
                 raise TypeError("time_limitはint型で入れてね")
             if time_limit != None and time_limit < 0:
                     raise ValueError("time_limitは0以上で入れてね")
-            # self.__insert_obj(
-            #     self.question_list + [
-            #         MockExamination(
-            #             subject_id=subject_id,
-            #             mock_examination_name=mock_examination_name,
-            #             time_limit=time_limit
-            #         )
-            #     ]
-            # )
+
             mock_examination_obj = MockExamination(
                 subject_id=subject_id,
                 mock_examination_name=mock_examination_name,
@@ -160,24 +152,24 @@ class SqlAlchemyControl:
 
         # 問題の回答をスタックする関数
         def question_response_stack(self,
-            mock_examination_response_id: int,
             question_id: int,
-            answer: str
+            response_content: str,
+            correction: bool
         ) -> None:
             # 型チェック
-            if not isinstance(mock_examination_response_id, int):
-                raise TypeError("mock_examination_response_idはint型で入れてね")
             if not isinstance(question_id, int):
                 raise TypeError("question_idはint型で入れてね")
-            if not isinstance(answer, str):
+            if not isinstance(response_content, str):
                 raise TypeError("answerはstr型で入れてね")
-            if len(self.question_list) == 0:
-                raise ValueError("insert.question_stack()で問題を入れてから実行してね")
+            if not isinstance(correction, bool):
+                raise TypeError("correctionはbool型で入れてね")
             self.response_list.append(
                 QuestionResponse(
-                    mock_examination_response_id=mock_examination_response_id,
+                    mock_examination_response_id=None,
+                    mock_examination_id=None,
                     question_id=question_id,
-                    response_content=answer
+                    response_content=response_content,
+                    correction=correction
                 )
             )
 
@@ -194,15 +186,17 @@ class SqlAlchemyControl:
 
             if len(self.response_list) == 0:
                 raise ValueError("insert.question_response_stack()で回答を入れてから実行してね")
+            
+            mock_examination_response_id = self.__insert_obj(MockExaminationResponse(
+                mock_examination_id=mock_examination_id,
+                interruption=interruption
+            ))
+            for response in self.response_list:
+                response.mock_examination_response_id = mock_examination_response_id
+                response.mock_examination_id = mock_examination_id
 
-            self.__insert_obj(
-                self.response_list + [
-                    MockExaminationResponse(
-                        mock_examination_id=mock_examination_id,
-                        interruption=interruption
-                    )
-                ]
-            )
+            self.__insert_obj(self.response_list)
+
             self.response_list = []
 
     class __Read:
