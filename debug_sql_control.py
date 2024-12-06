@@ -4,6 +4,7 @@ from data.table.subject import Subject
 from data.table.question import QuestionType
 
 database = SqlAlchemyControl()
+database.create_table()
 # database.debug.mock_examination(subject_id=7)
 # print(database.read.subject())
 # mock1 = database.read.mock_examination_by_id(id=1)
@@ -116,18 +117,34 @@ database = SqlAlchemyControl()
 #     time_limit=obj.time_limit
 # )
 
-obj = database.read.question_by_id(question_id=8)
-database.update.question(
-    question_id=8,
-    question_sentence="変更しました",
-    question_type=obj.question_type,
-    answer="変更しました"
-)
+# obj = database.read.question_by_id(question_id=8)
+# database.update.question(
+#     question_id=8,
+#     question_sentence="変更しました",
+#     question_type=obj.question_type,
+#     answer="変更しました"
+# )
 
 
-# 出力
-for mock_examination in database.read.mock_examination():
-    print(mock_examination)
-    print("question ↓")
-    [print(question) for question in database.read.question(mock_examination_id=mock_examination.id)]
+# # 出力
+# for mock_examination in database.read.mock_examination():
+#     print(mock_examination)
+#     print("question ↓")
+#     [print(question) for question in database.read.question(mock_examination_id=mock_examination.id)]
 
+
+
+# mock_examination_responseとquestion_responseの操作
+
+# for mock_examination_response in database.read.mock_examination_response():
+#     print(mock_examination_response)
+#     print("response ↓")
+    # [database.delete.question_response_by_id(question_response_id=question_response.id) for question_response in database.read.question_response(mock_examination_response_id=mock_examination_response.id)]
+    # database.delete.mock_examination_response_by_id(mock_examination_response_id=mock_examination_response.id)
+
+# database.delete.question_response_by_id(question_response_id=3)
+# try:
+#     i = database.read.question_response_by_id(question_response_id=3)
+#     print(i)
+# except Exception as e:
+#     print(e)
