@@ -74,15 +74,17 @@ class SqlAlchemyControl:
             self.response_list: list[QuestionResponse] = []
 
         # insertテンプレート関数
-        def __insert_obj(self, obj) -> int:
+        def __insert_obj(self, obj) -> int|list[int]:
             id = None
             with self.__session as session:
                 if type(obj) == list:
                     session.add_all(obj)
+                    session.commit()
+                    id  = [o.id for o in obj]
                 else:
                     session.add(obj)
-                session.commit()
-                id = obj.id
+                    session.commit()
+                    id = obj.id
             return id
 
 
@@ -151,7 +153,7 @@ class SqlAlchemyControl:
             )
             mock_examination_id = self.__insert_obj(mock_examination_obj)
 
-            for question in self.question_stack:
+            for question in self.question_list:
                 question.mock_examination_id = mock_examination_id
             self.__insert_obj(self.question_list)
             self.question_list = []
