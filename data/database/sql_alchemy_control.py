@@ -156,22 +156,17 @@ class SqlAlchemyControl:
         def question_response_stack(self,
             question_id: int,
             response_content: str,
-            correction: bool
         ) -> None:
             # 型チェック
             if not isinstance(question_id, int):
                 raise TypeError("question_idはint型で入れてね")
             if not isinstance(response_content, str):
                 raise TypeError("answerはstr型で入れてね")
-            if not isinstance(correction, bool):
-                raise TypeError("correctionはbool型で入れてね")
             self.response_list.append(
                 QuestionResponse(
                     mock_examination_response_id=None,
-                    mock_examination_id=None,
                     question_id=question_id,
                     response_content=response_content,
-                    correction=correction
                 )
             )
 
@@ -195,7 +190,6 @@ class SqlAlchemyControl:
             ))
             for response in self.response_list:
                 response.mock_examination_response_id = mock_examination_response_id
-                response.mock_examination_id = mock_examination_id
 
             self.__insert_obj(self.response_list)
 
@@ -314,11 +308,13 @@ class SqlAlchemyControl:
         def question_response(self,
             question_response_id: int,
             mock_examination_response_id:int,
+            question_id: int,
             response_content: str,
         ) -> None:
             with self.__session as session:
                 obj = session.get(QuestionResponse, question_response_id)
                 obj.mock_examination_response_id = mock_examination_response_id
+                obj.question_id = question_id
                 obj.response_content = response_content
                 session.commit()
 
