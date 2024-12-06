@@ -13,13 +13,14 @@ from data.table.base import Base
 
 class QuestionResponse(Base):
     __tablename__ = "question_response"
-    mock_examination_id: Mapped[int] = mapped_column(ForeignKey("mock_examination.mock_examination_id"), primary_key=True)
-    mock_examination_response_id: Mapped[int] = mapped_column(ForeignKey("mock_examination_response.mock_examination_response_id"), primary_key=True)
-    question_id: Mapped[int] = mapped_column(ForeignKey("question.question_id"), primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    mock_examination_id: Mapped[int] = mapped_column(ForeignKey("mock_examination.mock_examination_id"))
+    mock_examination_response_id: Mapped[int] = mapped_column(ForeignKey("mock_examination_response.id"))
+    question_id: Mapped[int] = mapped_column(ForeignKey("question.question_id"))
     response_content: Mapped[str]
     correction: Mapped[bool]
     created_at: Mapped[dt] = mapped_column(default=dt.now())
     updated_at: Mapped[dt] = mapped_column(default=dt.now(), onupdate=dt.now())
 
     def __repr__(self) -> str:
-        return f"QuestionResponse(mock_examination_id={self.mock_examination_id!r}, mock_examination_response_id={self.mock_examination_response_id!r}, question_id={self.question_id!r}, response_content={self.response_content!r}, correction={self.correction!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
+        return f"QuestionResponse(id={self.id}, mock_examination_id={self.mock_examination_id!r}, mock_examination_response_id={self.mock_examination_response_id!r}, question_id={self.question_id!r}, response_content={self.response_content!r}, correction={self.correction!r}, created_at={self.created_at!r}, updated_at={self.updated_at!r})"
