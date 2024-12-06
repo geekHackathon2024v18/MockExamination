@@ -214,7 +214,7 @@ class SqlAlchemyControl:
 
         # 科目の保存データをid指定で取得
         def subject_by_id(self, id: int) -> Subject:
-            stmt = select(Subject).where(Subject.subject_id == id)
+            stmt = select(Subject).where(Subject.id == id)
             return self.__session.execute(stmt).scalars().one()
 
         # 模擬試験の保存データ全てを取得
@@ -223,7 +223,7 @@ class SqlAlchemyControl:
             return self.__session.execute(stmt).scalars().all()
         # 模擬試験の保存データをid指定で取得
         def mock_examination_by_id(self, id: int) -> MockExamination:
-            stmt = select(MockExamination).where(MockExamination.mock_examination_id == id)
+            stmt = select(MockExamination).where(MockExamination.id == id)
             return self.__session.execute(stmt).scalars().one()
 
         # 問題の保存データ全てを取得
@@ -233,12 +233,10 @@ class SqlAlchemyControl:
 
         # 問題の保存データをid指定で取得
         def question_by_id(self,
-                mock_examination_id: int,
                 question_id: int
             ) -> Question:
             stmt = select(Question).\
-                where(Question.mock_examination_id == mock_examination_id).\
-                where(Question.question_id == question_id)
+                where(Question.id == question_id)
             return self.__session.execute(stmt).scalars().one()
 
         # 模擬試験の回答の保存データ全てを取得
@@ -247,8 +245,8 @@ class SqlAlchemyControl:
             return self.__session.execute(stmt).scalars().all()
 
         # 模擬試験の回答の保存データをid指定で取得
-        def mock_examination_response_by_id(self, id: int) -> MockExaminationResponse:
-            stmt = select(MockExaminationResponse).where(MockExaminationResponse.mock_examination_response_id == id)
+        def mock_examination_response_by_id(self, mock_examination_response_id: int) -> MockExaminationResponse:
+            stmt = select(MockExaminationResponse).where(MockExaminationResponse.id == id)
             return self.__session.execute(stmt).scalars().one()
 
         # 問題の回答の保存データ全てを取得
@@ -259,34 +257,12 @@ class SqlAlchemyControl:
 
         # 問題の解答の保存データをid指定で取得
         def question_response_by_id(self,
-            mock_examination_response_id: int,
             question_response_id: int,
         ) -> QuestionResponse:
             stmt = select(QuestionResponse).\
-                where(QuestionResponse.mock_examination_response_id == mock_examination_response_id).\
-                where(QuestionResponse.question_response_id == question_response_id)
+                where(QuestionResponse.id == question_response_id)
             return self.__session.execute(stmt).scalars.one()
 
-
-
-
-
-
-    # オブジェクト取得の関数
-    # def get_object(self, table_type: tableType, id: int):
-    #     with self.__session as session:
-    #         if table_type == tableType.SUBJECT:
-    #             return session.execute(select(Subject)).scalars().all()
-    #         elif table_type == tableType.MOCK_EXAMINATION:
-    #             return session.get(MockExamination, id)
-    #         elif table_type == tableType.QUESTION:
-    #             return session.get(Question, id)
-    #         elif table_type == tableType.MOCK_EXAMINATION_RESPONSE:
-    #             return session.get(MockExaminationResponse, id)
-    #         elif table_type == tableType.QUESTION_RESPONSE:
-    #             return session.get(QuestionResponse, id)
-    #         else:
-    #             return None
 
     # デバッグ用の関数
     def main(self):
