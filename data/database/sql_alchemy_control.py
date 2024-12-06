@@ -208,26 +208,26 @@ class SqlAlchemyControl:
         # 科目の保存データ全てを取得
         def subject(self) -> List[Subject]:
             stmt = select(Subject)
-            return self.__session.execute(stmt).scalars().all()
+            return self.__session.scalars(stmt).all()
 
         # 科目の保存データをid指定で取得
         def subject_by_id(self, id: int) -> Subject:
             stmt = select(Subject).where(Subject.id == id)
-            return self.__session.execute(stmt).scalars().one()
+            return self.__session.scalars(stmt).one()
 
         # 模擬試験の保存データ全てを取得
         def mock_examination(self) -> list[MockExamination]:
             stmt = select(MockExamination)
-            return self.__session.execute(stmt).scalars().all()
+            return self.__session.scalars(stmt).all()
         # 模擬試験の保存データをid指定で取得
         def mock_examination_by_id(self, id: int) -> MockExamination:
             stmt = select(MockExamination).where(MockExamination.id == id)
-            return self.__session.execute(stmt).scalars().one()
+            return self.__session.scalars(stmt).one()
 
         # 問題の保存データ全てを取得
         def question(self, mock_examination_id: int) -> list[Question]:
             stmt = select(Question).where(Question.mock_examination_id == mock_examination_id)
-            return self.__session.execute(stmt).scalars().all()
+            return self.__session.scalars(stmt).all()
 
         # 問題の保存データをid指定で取得
         def question_by_id(self,
@@ -235,23 +235,23 @@ class SqlAlchemyControl:
             ) -> Question:
             stmt = select(Question).\
                 where(Question.id == question_id)
-            return self.__session.execute(stmt).scalars().one()
+            return self.__session.scalars(stmt).one()
 
         # 模擬試験の回答の保存データ全てを取得
         def mock_examination_response(self) -> list[MockExaminationResponse]:
             stmt = select(MockExaminationResponse)
-            return self.__session.execute(stmt).scalars().all()
+            return self.__session.scalars(stmt).all()
 
         # 模擬試験の回答の保存データをid指定で取得
         def mock_examination_response_by_id(self, mock_examination_response_id: int) -> MockExaminationResponse:
             stmt = select(MockExaminationResponse).where(MockExaminationResponse.id == id)
-            return self.__session.execute(stmt).scalars().one()
+            return self.__session.scalars(stmt).one()
 
         # 問題の回答の保存データ全てを取得
         def question_response(self, mock_examination_response_id: int) -> list[QuestionResponse]:
             stmt = select(QuestionResponse).\
                 where(QuestionResponse.mock_examination_response_id == mock_examination_response_id)
-            return self.__session.execute(stmt).scalars().all()
+            return self.__session.scalars(stmt).all()
 
         # 問題の解答の保存データをid指定で取得
         def question_response_by_id(self,
@@ -259,7 +259,7 @@ class SqlAlchemyControl:
         ) -> QuestionResponse:
             stmt = select(QuestionResponse).\
                 where(QuestionResponse.id == question_response_id)
-            return self.__session.execute(stmt).scalars.one()
+            return self.__session.scalars(stmt).one()
 
     class __Update:
         def __init__(self, session) -> None:
