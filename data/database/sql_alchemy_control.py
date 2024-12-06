@@ -313,19 +313,13 @@ class SqlAlchemyControl:
 
         def question_response(self,
             question_response_id: int,
-            mock_examination_id: int,
             mock_examination_response_id:int,
-            question_id: int,
             response_content: str,
-            correction: str
         ) -> None:
             with self.__session as session:
                 obj = session.get(QuestionResponse, question_response_id)
-                obj.mock_examination_id = mock_examination_id
                 obj.mock_examination_response_id = mock_examination_response_id
-                obj.question_id = question_id
                 obj.response_content = response_content
-                obj.correction = correction
                 session.commit()
 
 
