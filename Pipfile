@@ -7,6 +7,8 @@ name = "pypi"
 setuptools = "*"
 sqlalchemy = "*"
 pydantic = "<2"
+pdfplumber = "*"
+"pdfminer.six" = "*"
 
 [dev-packages]
 
