@@ -1,11 +1,15 @@
 import pdfplumber
 
-# PDFファイルを読み込む
-with pdfplumber.open("parse_pdf/oop_w09.pdf") as pdf:
-    # テキストを抽出する
-    # print(f'{pdf.pages[num_page].extract_text()}')
-    s = ""
-    for pages in pdf.pages:
-        s += pages.extract_text() + "\n\n"
-        # print(pages.extract_text())
-    print(s)
+class PdfPlumberParsePdf:
+    def __init__(self, file_name):
+        self.file_name = file_name
+        self.pdf = pdfplumber.open(self.file_name)
+
+    def extract_text(self):
+        text = ""
+        for page in self.pdf.pages:
+            text += page.extract_text() + "\n\n"
+        return text
+
+    def close(self):
+        self.pdf.close()
