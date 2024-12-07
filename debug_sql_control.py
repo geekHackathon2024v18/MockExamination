@@ -11,25 +11,30 @@ database = SqlAlchemyControl()
 # print(mock1)
 
 # subjectの追加
-# database.insert.subject(subject_name="mock_subject1")
+# database.insert.subject(subject_name="共通")
 # print(database.read.subject())
 
 # mock_examinationの追加
 # insert_questions = [
 #     {
-#     "question_sentence": "問題文1",
+#     "question_sentence": "インターネット層のプロトコルではないものは？",
 #     "question_type": QuestionType.DESCRIPTIVE,
-#     "answer": "答え1"
+#     "answer": "PPP"
 #     },
 #     {
-#     "question_sentence": "問題文2",
+#     "question_sentence": "有線LANで使用される搬送波感知多重アクセス/衝突検知方式は？",
 #     "question_type": QuestionType.DESCRIPTIVE,
-#     "answer": "答え2"
+#     "answer": "CSMA/CD"
 #     },
 #     {
-#     "question_sentence": "問題文3",
+#     "question_sentence": "IPv4アドレス表記として正しくないのはどれか",
 #     "question_type": QuestionType.DESCRIPTIVE,
-#     "answer": "答え3"
+#     "answer": "192.168.15.256"
+#     },
+#     {
+#     "question_sentence": "ネットワーク部を25ビットとするときのサブネットマスクはどれか",
+#     "question_type": QuestionType.DESCRIPTIVE,
+#     "answer": "255.255.255.128"
 #     }
 # ]
 
@@ -42,7 +47,7 @@ database = SqlAlchemyControl()
 
 # database.insert.mock_examination(
 #     subject_id=1,
-#     mock_examination_name="mock_examination",
+#     mock_examination_name="情報ネットワークの問題",
 # )
 
 # [print(i) for i in database.read.mock_examination()]
