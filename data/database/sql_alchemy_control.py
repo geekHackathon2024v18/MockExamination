@@ -329,9 +329,46 @@ class SqlAlchemyControl:
         ) -> None:
             with self.__session as session:
                 obj = session.get(Question, question_id)
-                obj.question_sentence = question_sentence
-                obj.question_type = question_type
-                obj.answer = answer
+                if obj.question_type != question_type and question_type == QuestionType.CHOICE_4:
+                    raise ValueError("選択肢を変更する場合は、question_change_type_choice4()を実行してね")
+                else:
+                    obj.question_sentence = question_sentence
+                    obj.question_type = question_type
+                    obj.answer = answer
+
+                session.commit()
+
+        def question_change_type_choice4(self,
+            question_id: int,
+            question_sentence: str,
+            question_type: QuestionType,
+            answer: str,
+            choice_1: str,
+            choice_2: str,
+            choice_3: str,
+            choice_4: str
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(Question, question_id)
+                if obj.question_type == QuestionType.DESCRIPTIVE and question_type == QuestionType.CHOICE_4:
+                    choice4 = Choice4(
+                        question_id=question_id,
+                        choice_1=choice_1,
+                        choice_2=choice_2,
+                        choice_3=choice_3,
+                        choice_4=choice_4
+                    )
+                    session.add(choice4)
+                    obj.question_sentence = question_sentence
+                    obj.question_type = QuestionType.CHOICE_4
+                    if(answer == "1" or answer == "2" or answer == "3" or answer == "4"):
+                        session.rollback()
+                        raise ValueError("answerには、1,2,3,4の文字列型の数字を入れてね")
+                    obj.answer = answer
+                    session.rollback()
+                else:
+                    session.rollback()
+                    raise ValueError("この関数は、記述式から4択に変更する場合に使ってね")
                 session.commit()
 
         def choice4(self,
