@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from data.table.base import Base
+from src.data.table.base import Base
 
 
 class Choice4(Base):

@@ -1,13 +1,13 @@
 
 import textwrap
-from parse_pdf.pdfplumber_parse_pdf import PdfPlumberParsePdf
+from src.parse_pdf.pdfplumber_parse_pdf import PdfPlumberParsePdf
 import json
 
 import google.generativeai as genai
 
 from IPython.display import display
 from IPython.display import Markdown
-from request_gemini import env
+from src.request_gemini import env
 
 def to_markdown(text):
   text = text.replace('•', '  *')
@@ -17,14 +17,14 @@ def to_markdown(text):
 
 def request_gemini():
 
-  genai.configure(api_key=env.getApiKye())
+  genai.configure(api_key=env.getApiKey())
   # for m in genai.list_models():
   #   if 'generateContent' in m.supported_generation_methods:
   #     print(m.name)
 
 
   # pdfのテキスト化
-  pdf_parser = PdfPlumberParsePdf('parse_pdf/network_w09.pdf')
+  pdf_parser = PdfPlumberParsePdf('src/parse_pdf/network_w09.pdf')
   pdf_text = pdf_parser.extract_text()
 
   model = genai.GenerativeModel('gemini-1.5-flash')
@@ -52,7 +52,7 @@ def request_gemini():
   json_data = result.text.replace('```json', '').replace('```', '')
   # print(json_data)
   data = json.loads(json_data)
-  # for i in data['question_list']:
-  #   print(f'問題文:{i['question_sentence']},  選択肢[1: {i['choice_1']}, 2: {i['choice_2']}, 3: {i['choice_3']}, 4: {i['choice_4']}], 答え: {i['answer']}')
+  for i in data['question_list']:
+    print(f'問題文:{i['question_sentence']},  選択肢[1: {i['choice_1']}, 2: {i['choice_2']}, 3: {i['choice_3']}, 4: {i['choice_4']}], 答え: {i['answer']}')
 
   return data

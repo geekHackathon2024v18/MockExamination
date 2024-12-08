@@ -17,19 +17,19 @@ def create_result_window(answer, correct_answer, explanation):
 
     def open_title():
         result_root.destroy()  # ウィンドウを閉じる
-        subprocess.Popen(['python', 'gui/title.py'])
+        subprocess.Popen(['python', 'src/gui/title.py'])
 
     def open_review():
         result_root.destroy()  # ウィンドウを閉じる
-        subprocess.Popen(['python', 'gui/review.py'])
+        subprocess.Popen(['python', 'src/gui/review.py'])
 
     def continue_quiz():
-        if not load_quiz_data('gui/quiz.csv'):  # クイズがなくなった場合
+        if not load_quiz_data('src/gui/quiz.csv'):  # クイズがなくなった場合
             result_text = "問題がありません"
             result_label.config(text=result_text)
             result_root.after(2000, open_title)  # 2秒後にタイトルに戻る
         else:
-            subprocess.Popen(['python', 'gui/question.py'])  # 次のクイズを表示
+            subprocess.Popen(['python', 'src/gui/question.py'])  # 次のクイズを表示
             result_root.destroy()
 
     def load_quiz_data(filename):
@@ -50,7 +50,7 @@ def create_result_window(answer, correct_answer, explanation):
     review_button = tk.Button(result_root, text="復習する", command=open_review, font=("Arial", 14))
     review_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
-    if load_quiz_data('gui/quiz.csv'):
+    if load_quiz_data('src/gui/quiz.csv'):
         continue_button = tk.Button(result_root, text="続けて解く", command=continue_quiz, font=("Arial", 14), bg="green", fg="white")
         continue_button.place(relx=0.8, rely=0.7, anchor=tk.CENTER)
 

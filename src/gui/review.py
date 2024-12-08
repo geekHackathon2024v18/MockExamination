@@ -15,17 +15,17 @@ def load_answered_quizzes(filename):
 
 # 解いた問題をリセットして quiz.csv に戻す
 def reset_answered_quizzes():
-    answered_quizzes = load_answered_quizzes('gui/answered_quizzes.csv')
-    
+    answered_quizzes = load_answered_quizzes('src/gui/answered_quizzes.csv')
+
     # quiz.csv に解いた問題を追加
-    with open('gui/quiz.csv', 'a', newline='', encoding='utf-8') as quizfile:
+    with open('src/gui/quiz.csv', 'a', newline='', encoding='utf-8') as quizfile:
         writer = csv.writer(quizfile)
         writer.writerows(answered_quizzes)
-    
+
     # answered_quizzes.csv を空にする
-    with open('gui/answered_quizzes.csv', 'w', newline='', encoding='utf-8') as f:
+    with open('src/gui/answered_quizzes.csv', 'w', newline='', encoding='utf-8') as f:
         pass
-    
+
     # リセット完了メッセージ
     reset_message = tk.Label(root, text="解いた問題をリセットしました", font=("Arial", 16), bg="white", fg="black")
     reset_message.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
@@ -52,7 +52,7 @@ else:
             choice_label.pack(pady=5)
 
 def open_title():
-    subprocess.Popen(['python', 'gui/title.py'])
+    subprocess.Popen(['python', 'src/gui/title.py'])
     root.withdraw()  # 現在のウィンドウを閉じる
 
 # タイトルに戻るボタン

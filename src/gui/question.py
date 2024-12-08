@@ -111,7 +111,7 @@ def show_no_quiz_message():
 
     def back_to_title():
         no_quiz_root.destroy()
-        subprocess.Popen(['python', 'gui/title.py'])
+        subprocess.Popen(['python', 'src/gui/title.py'])
 
     title_button = tk.Button(no_quiz_root, text="タイトルに戻る", command=back_to_title, font=("Arial", 14))
     title_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)

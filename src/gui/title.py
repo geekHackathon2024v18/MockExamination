@@ -8,17 +8,17 @@ root.attributes('-fullscreen', True)  # 全画面表示を有効にする
 
 def open_question():
     # 少し時間を置いてから次のウィンドウを開く
-    subprocess.Popen(['python', 'gui/question.py'])
+    subprocess.Popen(['python', 'src/gui/question.py'])
     root.destroy()
 
 def open_review():
     # 少し時間を置いてから次のウィンドウを開く
-    subprocess.Popen(['python', 'gui/review.py'])
+    subprocess.Popen(['python', 'src/gui/review.py'])
     root.destroy()
 
 def open_pdf():
     # 少し時間を置いてから次のウィンドウを開く
-    subprocess.Popen(['python', 'gui/pdf.py'])
+    subprocess.Popen(['python', 'src/gui/pdf.py'])
     root.destroy()
 
 # ウィジェットの配置

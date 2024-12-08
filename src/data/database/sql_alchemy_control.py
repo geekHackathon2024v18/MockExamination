@@ -1,20 +1,20 @@
 from sqlalchemy import create_engine, select, update
 from sqlalchemy.orm import Session
 from datetime import datetime
-from data.table.subject import Subject
-from data.table.mock_examination import MockExamination
-from data.table.question import Question, QuestionType
-from data.table.choice_4 import Choice4
-from data.table.mock_examination_response import MockExaminationResponse
-from data.table.question_response import QuestionResponse
-from data.table.base import Base
+from src.data.table.subject import Subject
+from src.data.table.mock_examination import MockExamination
+from src.data.table.question import Question, QuestionType
+from src.data.table.choice_4 import Choice4
+from src.data.table.mock_examination_response import MockExaminationResponse
+from src.data.table.question_response import QuestionResponse
+from src.data.table.base import Base
 from typing import List
 import time
 
 # interface継承してカプセル化して、この部分に関してやり切りたい
 class SqlAlchemyControl:
     def __init__(self) -> None:
-        self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
+        self.__engine = create_engine("sqlite:///src/data/database/app.db", echo=True, future=True)
         self.__session = Session(self.__engine)
         self.debug = self.__DebugPrint(self.__session)
         self.insert = self.__Insert(self.__session)

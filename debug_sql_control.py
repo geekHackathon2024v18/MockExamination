@@ -1,7 +1,7 @@
-from data.database.sql_alchemy_control import SqlAlchemyControl
-from data.table.question import Question
-from data.table.subject import Subject
-from data.table.question import QuestionType
+from src.data.database.sql_alchemy_control import SqlAlchemyControl
+from src.data.table.question import Question
+from src.data.table.subject import Subject
+from src.data.table.question import QuestionType
 
 db = SqlAlchemyControl()
 # database.create_table()
