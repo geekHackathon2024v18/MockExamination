@@ -398,6 +398,12 @@ class SqlAlchemyControl:
                 session.delete(obj)
                 session.commit()
 
+        def choice4_by_id(self, choice4_id: int) -> None:
+            with self.__session as session:
+                obj = session.get(Choice4, choice4_id)
+                session.delete(obj)
+                session.commit()
+
         def mock_examination_response_by_id(self, mock_examination_response_id: int) -> None:
             with self.__session as session:
                 obj = session.get(MockExaminationResponse, mock_examination_response_id)
