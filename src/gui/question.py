@@ -1,13 +1,14 @@
+import sys
 import tkinter as tk
 import csv
 import random
 import subprocess
 
-from data.database.sql_alchemy_control import SqlAlchemyControl
 
 
 
 # グローバル変数の定義
+db = None
 quiz_list = []
 choice4_list = []
 answered_quizzes = []  # 解いた問題を記録するリスト
@@ -16,26 +17,28 @@ root = None
 current_quiz = None
 
 # CSVファイルからクイズデータを読み込む
-def load_quiz_data(filename):
-    global quiz_list, answered_quizzes
-    with open(filename, newline='', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)  # ヘッダーをスキップ
-        quiz_list = list(reader)
+# def load_quiz_data(db, filename):
+#     global quiz_list, answered_quizzes
+#     with open(filename, newline='', encoding='utf-8') as csvfile:
+#         reader = csv.reader(csvfile)
+#         next(reader)  # ヘッダーをスキップ
+#         quiz_list = list(reader)
 
-    # 解いた問題を読み込んでリストに追加
-    try:
-        with open('gui/answered_quizzes.csv', newline='', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            answered_quizzes = list(reader)
-    except FileNotFoundError:
-        answered_quizzes = []
+#     # 解いた問題を読み込んでリストに追加
+#     try:
+#         with open('gui/answered_quizzes.csv', newline='', encoding='utf-8') as csvfile:
+#             reader = csv.reader(csvfile)
+#             answered_quizzes = list(reader)
+#     except FileNotFoundError:
+#         answered_quizzes = []
 
-    # 解いた問題をクイズリストから除外
-    quiz_list = [quiz for quiz in quiz_list if quiz not in answered_quizzes]
+#     # 解いた問題をクイズリストから除外
+#     quiz_list = [quiz for quiz in quiz_list if quiz not in answered_quizzes]
 
-def load_quiz_data(mock_examination_id: int) -> None:
-    db = SqlAlchemyControl()
+def load_quiz_data(db_given, mock_examination_id: int) -> None:
+    global db
+    db = db_given
+    # db = SqlAlchemyControl()
     global quiz_list, choice4_list, answered_quizzes
     quiz_list = db.read.question(mock_examination_id=mock_examination_id)
     # uiが4択固定なんで、このタイミングで読み出す
