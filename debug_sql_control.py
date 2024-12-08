@@ -203,15 +203,16 @@ db = SqlAlchemyControl()
 #     choice_3="IP",
 #     choice_4="ICMP"
 # )
-# dlog = ''
-# for mock_examination in db.read.mock_examination():
-#     dlog += '\n[mock_examination]' + '\n'
-#     dlog += f'{mock_examination} \n'
-#     for question in db.read.question(mock_examination_id=mock_examination.id):
-#         dlog += "\n[question]" + '\n'
-#         dlog += f'{question}\n'
-#         if question.question_type == QuestionType.CHOICE_4:
-#             dlog += "\n[choice4]" + '\n'
-#             dlog += f"{db.read.choice4(question_id=question.id)} \n"
 
-# print(dlog)
+# db.delete.question_by_id(question_id=6)
+dlog = ''
+for mock_examination in db.read.mock_examination():
+    dlog += '\n[mock_examination]' + '\n'
+    dlog += f'{mock_examination} \n'
+    for question in db.read.question(mock_examination_id=mock_examination.id):
+        dlog += "\n[question]" + '\n'
+        dlog += f'{question}\n'
+        if question.question_type == QuestionType.CHOICE_4:
+            dlog += "\n[choice4]" + '\n'
+            dlog += f"{db.read.choice4(question_id=question.id)} \n"
+print(dlog)
