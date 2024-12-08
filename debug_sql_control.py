@@ -192,12 +192,26 @@ db = SqlAlchemyControl()
 #     mock_examination_name=data["mock_examination_name"],
 # )
 
+# question = db.read.question_by_id(question_id=4)
+# db.update.question_change_type_choice4(
+#     question_id=1,
+#     question_sentence=question.question_sentence,
+#     question_type=QuestionType.CHOICE_4,
+#     answer = "2",
+#     choice_1="ARP",
+#     choice_2="PPP",
+#     choice_3="IP",
+#     choice_4="ICMP"
+# )
+# dlog = ''
 # for mock_examination in db.read.mock_examination():
-#     print('\n[mock_examination]')
-#     print(mock_examination)
+#     dlog += '\n[mock_examination]' + '\n'
+#     dlog += f'{mock_examination} \n'
 #     for question in db.read.question(mock_examination_id=mock_examination.id):
-#         print("\n[question]")
-#         print(question)
+#         dlog += "\n[question]" + '\n'
+#         dlog += f'{question}\n'
 #         if question.question_type == QuestionType.CHOICE_4:
-#             print("\n[choice4]")
-#             db.read.choice4(question_id=question.id)
+#             dlog += "\n[choice4]" + '\n'
+#             dlog += f"{db.read.choice4(question_id=question.id)} \n"
+
+# print(dlog)
