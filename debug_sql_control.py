@@ -206,6 +206,11 @@ db = SqlAlchemyControl()
 
 # db.delete.question_by_id(question_id=6)
 dlog = ''
+
+dlog += '\n[subject]' + '\n'
+for subject in db.read.subject():
+    dlog += f'{subject} \n'
+
 for mock_examination in db.read.mock_examination():
     dlog += '\n[mock_examination]' + '\n'
     dlog += f'{mock_examination} \n'
