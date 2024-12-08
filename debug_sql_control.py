@@ -3,7 +3,7 @@ from data.table.question import Question
 from data.table.subject import Subject
 from data.table.question import QuestionType
 
-database = SqlAlchemyControl()
+db = SqlAlchemyControl()
 # database.create_table()
 # database.debug.mock_examination(subject_id=7)
 # print(database.read.subject())
@@ -149,3 +149,55 @@ database = SqlAlchemyControl()
 #     print(i)
 # except Exception as e:
 #     print(e)
+
+# choice4を操作
+# data = {
+# "mock_examination_name": "情報ネットワーク 第9回 模擬試験",
+#   "question_list": [
+#    {
+#       "question_sentence": "VRRP (Virtual Router Redundancy Protocol) の主な目的は？",
+#       "choice_1": "IPアドレスの動的な割り当て",
+#       "choice_2": "ルーターの冗長化",
+#       "choice_3": "ネットワークのセキュリティ強化",
+#       "choice_4": "通信品質の制御",
+#       "answer": "2"
+#     },
+#     {
+#       "question_sentence": "IPマルチキャストで利用されるアドレスクラスはどれか？",
+#       "choice_1": "クラスA",
+#       "choice_2": "クラスB",
+#       "choice_3": "クラスC",
+#       "choice_4": "クラスD",
+#       "answer": "4"
+#     }
+#   ]
+# }
+
+# for question in data["question_list"]:
+#     db.insert.question_stack(
+#         question_sentence=question["question_sentence"],
+#         question_type=QuestionType.CHOICE_4,
+#         answer=question["answer"]
+#     )
+
+#     db.insert.choice4_stack(
+#         choice_1=question["choice_1"],
+#         choice_2=question["choice_2"],
+#         choice_3=question["choice_3"],
+#         choice_4=question["choice_4"]
+#     )
+
+# db.insert.mock_examination(
+#     subject_id=1,
+#     mock_examination_name=data["mock_examination_name"],
+# )
+
+for mock_examination in db.read.mock_examination():
+    print('\n[mock_examination]')
+    print(mock_examination)
+    for question in db.read.question(mock_examination_id=mock_examination.id):
+        print("\n[question]")
+        print(question)
+        for choice4 in db.read.choice4(question_id=question.id):
+            print("\n[choice4]")
+            print(choice4)
