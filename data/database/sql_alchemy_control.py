@@ -261,6 +261,15 @@ class SqlAlchemyControl:
                 where(Question.id == question_id)
             return self.__session.scalars(stmt).one()
 
+        #   選択肢の保存データ全てを取得
+        def choice4(self, question_id: int) -> list[Choice4]:
+            stmt = select(Choice4).where(Choice4.question_id == question_id)
+            return self.__session.scalars(stmt).all()
+
+        def choice4_by_id(self, choice4_id: int) -> Choice4:
+            stmt = select(Choice4).where(Choice4.id == choice4_id)
+            return self.__session.scalars(stmt).one()
+
         # 模擬試験の回答の保存データ全てを取得
         def mock_examination_response(self) -> list[MockExaminationResponse]:
             stmt = select(MockExaminationResponse)
