@@ -361,11 +361,11 @@ class SqlAlchemyControl:
                     session.add(choice4)
                     obj.question_sentence = question_sentence
                     obj.question_type = QuestionType.CHOICE_4
-                    if(answer == "1" or answer == "2" or answer == "3" or answer == "4"):
+                    if(answer != "1" and answer != "2" and answer != "3" and answer != "4"):
                         session.rollback()
                         raise ValueError("answerには、1,2,3,4の文字列型の数字を入れてね")
-                    obj.answer = answer
-                    session.rollback()
+                    else :
+                        obj.answer = answer
                 else:
                     session.rollback()
                     raise ValueError("この関数は、記述式から4択に変更する場合に使ってね")
