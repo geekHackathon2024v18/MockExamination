@@ -334,6 +334,21 @@ class SqlAlchemyControl:
                 obj.answer = answer
                 session.commit()
 
+        def choice4(self,
+            choice4_id: int,
+            choice_1: str,
+            choice_2: str,
+            choice_3: str,
+            choice_4: str,
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(Choice4, choice4_id)
+                obj.choice_1 = choice_1
+                obj.choice_2 = choice_2
+                obj.choice_3 = choice_3
+                obj.choice_4 = choice_4
+                session.commit()
+
         def mock_examination_response(self,
             mock_examination_response_id: int,
             mock_examination_id: int,
