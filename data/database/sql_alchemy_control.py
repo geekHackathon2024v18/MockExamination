@@ -181,6 +181,7 @@ class SqlAlchemyControl:
                     self.__insert_obj(choice4)
 
             self.__question_list = []
+            self.__choice4_list = []
 
         # 問題の回答をスタックする関数
         def question_response_stack(self,
