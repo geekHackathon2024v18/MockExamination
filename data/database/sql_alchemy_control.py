@@ -73,9 +73,9 @@ class SqlAlchemyControl:
     class __Insert:
         def __init__(self, session) -> None:
             self.__session = session
-            self.question_list: list[Question] = []
-            self.choice4_list: list[Choice4] = []
-            self.response_list: list[QuestionResponse] = []
+            self.__question_list: list[Question] = []
+            self.__choice4_list: list[Choice4] = []
+            self.__response_list: list[QuestionResponse] = []
 
         # insertテンプレート関数
         def __insert_obj(self, obj) -> int|list[int]:
@@ -112,7 +112,7 @@ class SqlAlchemyControl:
             if not isinstance(answer, str):
                 raise TypeError("answerはstr型で入れてね")
 
-            self.question_list.append(
+            self.__question_list.append(
                 Question(
                     mock_examination_id=None,
                     question_sentence=question_sentence,
@@ -136,7 +136,7 @@ class SqlAlchemyControl:
                 raise TypeError("choice_3はstr型で入れてね")
             if not isinstance(choice_4, str):
                 raise TypeError("choice_4はstr型で入れてね")
-            self.choice4_list.append(
+            self.__choice4_list.append(
                 Choice4(
                     question_id=None,
                     choice_1=choice_1,
@@ -145,6 +145,7 @@ class SqlAlchemyControl:
                     choice_4=choice_4,
                 )
             )
+
         # 模擬試験の情報を追加する関数
         def mock_examination(self,
             subject_id: int,
@@ -152,7 +153,7 @@ class SqlAlchemyControl:
             time_limit: int = None,
         ) -> None:
             # questionをスタックしたかを確認
-            if len(self.question_list) == 0:
+            if len(self.__question_list) == 0:
                 raise ValueError("insert.question_stack()か、insert.question_list_stack()で問題を入れてから実行してね")
             # 型チェック
             if not isinstance(subject_id, int):
@@ -171,15 +172,15 @@ class SqlAlchemyControl:
             )
             mock_examination_id = self.__insert_obj(mock_examination_obj)
 
-            for question in self.question_list:
+            for question in self.__question_list:
                 question.mock_examination_id = mock_examination_id
-                question_id = self.__insert_obj(self.question_list)
-                if question.question_type == QuestionType.choice4:
-                    choice4 = self.choice4_list.pop(0)
+                question_id = self.__insert_obj(question)
+                if question.question_type == QuestionType.CHOICE_4:
+                    choice4 = self.__choice4_list.pop(0)
                     choice4.question_id = question_id
                     self.__insert_obj(choice4)
 
-            self.question_list = []
+            self.__question_list = []
 
         # 問題の回答をスタックする関数
         def question_response_stack(self,
@@ -191,7 +192,7 @@ class SqlAlchemyControl:
                 raise TypeError("question_idはint型で入れてね")
             if not isinstance(response_content, str):
                 raise TypeError("answerはstr型で入れてね")
-            self.response_list.append(
+            self.__response_list.append(
                 QuestionResponse(
                     mock_examination_response_id=None,
                     question_id=question_id,
@@ -210,19 +211,19 @@ class SqlAlchemyControl:
             if not isinstance(interruption, bool):
                 raise TypeError("interruptionはbool型で入れてね")
 
-            if len(self.response_list) == 0:
+            if len(self.__response_list) == 0:
                 raise ValueError("insert.question_response_stack()で回答を入れてから実行してね")
 
             mock_examination_response_id = self.__insert_obj(MockExaminationResponse(
                 mock_examination_id=mock_examination_id,
                 interruption=interruption
             ))
-            for response in self.response_list:
+            for response in self.__response_list:
                 response.mock_examination_response_id = mock_examination_response_id
 
-            self.__insert_obj(self.response_list)
+            self.__insert_obj(self.__response_list)
 
-            self.response_list = []
+            self.__response_list = []
 
     class __Read:
         def __init__(self, session) -> None:
