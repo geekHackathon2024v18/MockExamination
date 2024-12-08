@@ -7,6 +7,7 @@ import google.generativeai as genai
 
 from IPython.display import display
 from IPython.display import Markdown
+from request_gemini import env
 
 def to_markdown(text):
   text = text.replace('•', '  *')
@@ -16,7 +17,7 @@ def to_markdown(text):
 
 def request_gemini():
 
-  genai.configure(api_key='AIzaSyDBtuGMgyUCmAegeXZkBjf6ey-L8MdBCwk')
+  genai.configure(api_key=env.getApiKye())
   # for m in genai.list_models():
   #   if 'generateContent' in m.supported_generation_methods:
   #     print(m.name)
