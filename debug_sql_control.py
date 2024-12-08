@@ -192,12 +192,12 @@ db = SqlAlchemyControl()
 #     mock_examination_name=data["mock_examination_name"],
 # )
 
-for mock_examination in db.read.mock_examination():
-    print('\n[mock_examination]')
-    print(mock_examination)
-    for question in db.read.question(mock_examination_id=mock_examination.id):
-        print("\n[question]")
-        print(question)
-        for choice4 in db.read.choice4(question_id=question.id):
-            print("\n[choice4]")
-            print(choice4)
+# for mock_examination in db.read.mock_examination():
+#     print('\n[mock_examination]')
+#     print(mock_examination)
+#     for question in db.read.question(mock_examination_id=mock_examination.id):
+#         print("\n[question]")
+#         print(question)
+#         if question.question_type == QuestionType.CHOICE_4:
+#             print("\n[choice4]")
+#             db.read.choice4(question_id=question.id)
