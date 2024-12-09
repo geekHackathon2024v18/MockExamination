@@ -7,9 +7,12 @@ name = "pypi"
 setuptools = "*"
 sqlalchemy = "*"
 pydantic = "<2"
+pdfplumber = "*"
+google-generativeai = "*"
+ipython = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
-python_full_version = "3.11.0"
+python_version = "3.12"
+python_full_version = "3.12.8"

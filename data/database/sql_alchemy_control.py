@@ -4,6 +4,7 @@ from datetime import datetime
 from data.table.subject import Subject
 from data.table.mock_examination import MockExamination
 from data.table.question import Question, QuestionType
+from data.table.choice_4 import Choice4
 from data.table.mock_examination_response import MockExaminationResponse
 from data.table.question_response import QuestionResponse
 from data.table.base import Base
@@ -13,7 +14,7 @@ import time
 # interface継承してカプセル化して、この部分に関してやり切りたい
 class SqlAlchemyControl:
     def __init__(self) -> None:
-        self.__engine = create_engine("sqlite:///data/database/sample.db", echo=True, future=True)
+        self.__engine = create_engine("sqlite:///data/database/app.db", echo=True, future=True)
         self.__session = Session(self.__engine)
         self.debug = self.__DebugPrint(self.__session)
         self.insert = self.__Insert(self.__session)
@@ -72,8 +73,9 @@ class SqlAlchemyControl:
     class __Insert:
         def __init__(self, session) -> None:
             self.__session = session
-            self.question_list: list[Question] = []
-            self.response_list: list[QuestionResponse] = []
+            self.__question_list: list[Question] = []
+            self.__choice4_list: list[Choice4] = []
+            self.__response_list: list[QuestionResponse] = []
 
         # insertテンプレート関数
         def __insert_obj(self, obj) -> int|list[int]:
@@ -89,7 +91,6 @@ class SqlAlchemyControl:
                     id = obj.id
             return id
 
-
         # 科目の情報を追加の関数
         def subject(self, subject_name: str) -> None:
             #型チェック
@@ -97,7 +98,6 @@ class SqlAlchemyControl:
                 raise TypeError("subject_name must be str")
 
             self.__insert_obj(Subject(subject_name=subject_name))
-
 
         def question_stack(self,
             question_sentence: str,
@@ -112,12 +112,37 @@ class SqlAlchemyControl:
             if not isinstance(answer, str):
                 raise TypeError("answerはstr型で入れてね")
 
-            self.question_list.append(
+            self.__question_list.append(
                 Question(
                     mock_examination_id=None,
                     question_sentence=question_sentence,
                     question_type=question_type,
                     answer=answer
+                )
+            )
+
+        def choice4_stack(self,
+            choice_1: str,
+            choice_2: str,
+            choice_3: str,
+            choice_4: str,
+        ) -> None:
+            # 型チェック
+            if not isinstance(choice_1, str):
+                raise TypeError("choice_1はstr型で入れてね")
+            if not isinstance(choice_2, str):
+                raise TypeError("choice_2はstr型で入れてね")
+            if not isinstance(choice_3, str):
+                raise TypeError("choice_3はstr型で入れてね")
+            if not isinstance(choice_4, str):
+                raise TypeError("choice_4はstr型で入れてね")
+            self.__choice4_list.append(
+                Choice4(
+                    question_id=None,
+                    choice_1=choice_1,
+                    choice_2=choice_2,
+                    choice_3=choice_3,
+                    choice_4=choice_4,
                 )
             )
 
@@ -128,7 +153,7 @@ class SqlAlchemyControl:
             time_limit: int = None,
         ) -> None:
             # questionをスタックしたかを確認
-            if len(self.question_list) == 0:
+            if len(self.__question_list) == 0:
                 raise ValueError("insert.question_stack()か、insert.question_list_stack()で問題を入れてから実行してね")
             # 型チェック
             if not isinstance(subject_id, int):
@@ -147,10 +172,16 @@ class SqlAlchemyControl:
             )
             mock_examination_id = self.__insert_obj(mock_examination_obj)
 
-            for question in self.question_list:
+            for question in self.__question_list:
                 question.mock_examination_id = mock_examination_id
-            self.__insert_obj(self.question_list)
-            self.question_list = []
+                question_id = self.__insert_obj(question)
+                if question.question_type == QuestionType.CHOICE_4:
+                    choice4 = self.__choice4_list.pop(0)
+                    choice4.question_id = question_id
+                    self.__insert_obj(choice4)
+
+            self.__question_list = []
+            self.__choice4_list = []
 
         # 問題の回答をスタックする関数
         def question_response_stack(self,
@@ -162,7 +193,7 @@ class SqlAlchemyControl:
                 raise TypeError("question_idはint型で入れてね")
             if not isinstance(response_content, str):
                 raise TypeError("answerはstr型で入れてね")
-            self.response_list.append(
+            self.__response_list.append(
                 QuestionResponse(
                     mock_examination_response_id=None,
                     question_id=question_id,
@@ -181,19 +212,19 @@ class SqlAlchemyControl:
             if not isinstance(interruption, bool):
                 raise TypeError("interruptionはbool型で入れてね")
 
-            if len(self.response_list) == 0:
+            if len(self.__response_list) == 0:
                 raise ValueError("insert.question_response_stack()で回答を入れてから実行してね")
 
             mock_examination_response_id = self.__insert_obj(MockExaminationResponse(
                 mock_examination_id=mock_examination_id,
                 interruption=interruption
             ))
-            for response in self.response_list:
+            for response in self.__response_list:
                 response.mock_examination_response_id = mock_examination_response_id
 
-            self.__insert_obj(self.response_list)
+            self.__insert_obj(self.__response_list)
 
-            self.response_list = []
+            self.__response_list = []
 
     class __Read:
         def __init__(self, session) -> None:
@@ -229,6 +260,15 @@ class SqlAlchemyControl:
             ) -> Question:
             stmt = select(Question).\
                 where(Question.id == question_id)
+            return self.__session.scalars(stmt).one()
+
+        #   選択肢の保存データ全てを取得
+        def choice4(self, question_id: int) -> Choice4:
+            stmt = select(Choice4).where(Choice4.question_id == question_id)
+            return self.__session.scalars(stmt).one()
+
+        def choice4_by_id(self, choice4_id: int) -> Choice4:
+            stmt = select(Choice4).where(Choice4.id == choice4_id)
             return self.__session.scalars(stmt).one()
 
         # 模擬試験の回答の保存データ全てを取得
@@ -289,9 +329,61 @@ class SqlAlchemyControl:
         ) -> None:
             with self.__session as session:
                 obj = session.get(Question, question_id)
-                obj.question_sentence = question_sentence
-                obj.question_type = question_type
-                obj.answer = answer
+                if obj.question_type != question_type and question_type == QuestionType.CHOICE_4:
+                    raise ValueError("選択肢を変更する場合は、question_change_type_choice4()を実行してね")
+                else:
+                    obj.question_sentence = question_sentence
+                    obj.question_type = question_type
+                    obj.answer = answer
+
+                session.commit()
+
+        def question_change_type_choice4(self,
+            question_id: int,
+            question_sentence: str,
+            question_type: QuestionType,
+            answer: str,
+            choice_1: str,
+            choice_2: str,
+            choice_3: str,
+            choice_4: str
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(Question, question_id)
+                if obj.question_type == QuestionType.DESCRIPTIVE and question_type == QuestionType.CHOICE_4:
+                    choice4 = Choice4(
+                        question_id=question_id,
+                        choice_1=choice_1,
+                        choice_2=choice_2,
+                        choice_3=choice_3,
+                        choice_4=choice_4
+                    )
+                    session.add(choice4)
+                    obj.question_sentence = question_sentence
+                    obj.question_type = QuestionType.CHOICE_4
+                    if(answer != "1" and answer != "2" and answer != "3" and answer != "4"):
+                        session.rollback()
+                        raise ValueError("answerには、1,2,3,4の文字列型の数字を入れてね")
+                    else :
+                        obj.answer = answer
+                else:
+                    session.rollback()
+                    raise ValueError("この関数は、記述式から4択に変更する場合に使ってね")
+                session.commit()
+
+        def choice4(self,
+            choice4_id: int,
+            choice_1: str,
+            choice_2: str,
+            choice_3: str,
+            choice_4: str,
+        ) -> None:
+            with self.__session as session:
+                obj = session.get(Choice4, choice4_id)
+                obj.choice_1 = choice_1
+                obj.choice_2 = choice_2
+                obj.choice_3 = choice_3
+                obj.choice_4 = choice_4
                 session.commit()
 
         def mock_examination_response(self,
@@ -343,6 +435,12 @@ class SqlAlchemyControl:
                 session.delete(obj)
                 session.commit()
 
+        def choice4_by_id(self, choice4_id: int) -> None:
+            with self.__session as session:
+                obj = session.get(Choice4, choice4_id)
+                session.delete(obj)
+                session.commit()
+
         def mock_examination_response_by_id(self, mock_examination_response_id: int) -> None:
             with self.__session as session:
                 obj = session.get(MockExaminationResponse, mock_examination_response_id)
@@ -354,4 +452,3 @@ class SqlAlchemyControl:
                 obj = session.get(QuestionResponse, question_response_id)
                 session.delete(obj)
                 session.commit()
-
