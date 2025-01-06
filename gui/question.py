@@ -1,84 +1,73 @@
 import tkinter as tk
 import csv
 import random
-import subprocess
+from result import create_result_window
 
-# グローバル変数の定義
 quiz_list = []
-answered_quizzes = []  # 解いた問題を記録するリスト
+answered_quizzes = []
 choice_var = None
-root = None
 current_quiz = None
 
-# CSVファイルからクイズデータを読み込む
 def load_quiz_data(filename):
     global quiz_list, answered_quizzes
     with open(filename, newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
-        next(reader)  # ヘッダーをスキップ
+        next(reader)
         quiz_list = list(reader)
 
-    # 解いた問題を読み込んでリストに追加
     try:
-        with open('gui/answered_quizzes.csv', newline='', encoding='utf-8') as csvfile:
+        with open('answered_quizzes.csv', newline='', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             answered_quizzes = list(reader)
     except FileNotFoundError:
         answered_quizzes = []
 
-    # 解いた問題をクイズリストから除外
     quiz_list = [quiz for quiz in quiz_list if quiz not in answered_quizzes]
 
-# クイズを表示するウィンドウを作成
-def create_quiz_window():
-    global choice_var, root, current_quiz
-    if len(quiz_list) == 0:
-        show_no_quiz_message()
-        return
+def create_window():
+    global choice_var, current_quiz
 
     root = tk.Tk()
     root.title("4択クイズ")
     root.attributes('-fullscreen', True)
+
+    if len(quiz_list) == 0:
+        show_no_quiz_message(root)
+        return
+
+    current_quiz = random.choice(quiz_list)
     
-    current_quiz = random.choice(quiz_list)  # ランダムにクイズを選択
-    
-    # 質問ラベルの作成
     question_label = tk.Label(root, text=current_quiz[0], font=("Arial", 30))
     question_label.pack(pady=20)
     
-    # 選択肢のラジオボタンを作成
     choice_var = tk.StringVar()
-    choice_var.set(None)  # 初期値を設定
+    choice_var.set(None)
     
-    for i in range(1, 5):  # 選択肢1～4をラジオボタンとして追加
+    for i in range(1, 5):
         tk.Radiobutton(root, text=current_quiz[i], variable=choice_var, value=current_quiz[i], font=("Arial", 30)).pack(anchor=tk.W, padx=20)
     
-    # 送信ボタンの作成
-    submit_button = tk.Button(root, text="送信", command=submit_answer, font=("Arial", 30), width=10, height=2)
+    submit_button = tk.Button(root, text="送信", command=lambda: submit_answer(root), font=("Arial", 30), width=10, height=2)
     submit_button.pack(pady=20)
     
     root.mainloop()
 
-def submit_answer():
+def submit_answer(root):
     selected_answer = choice_var.get()
     correct_answer = current_quiz[5]
     explanation = current_quiz[6]
-    
-    # 解いた問題を記録し、次回以降表示されないようにする
+
     answered_quizzes.append(current_quiz)
-    with open('gui/answered_quizzes.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('answered_quizzes.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(answered_quizzes)
     
-    # クイズリストから解いた問題を削除
     quiz_list.remove(current_quiz)
-    
-    # 正解発表用のスクリプトを非同期で実行
-    subprocess.Popen(['python', 'gui/result.py', selected_answer, correct_answer, explanation])
-    root.destroy()
 
-def show_no_quiz_message():
-    no_quiz_root = tk.Tk()
+    root.destroy()  # ウィンドウを閉じる
+    create_result_window(selected_answer, correct_answer, explanation, None)  # 結果画面を表示
+
+def show_no_quiz_message(root):
+    no_quiz_root = tk.Toplevel(root)
     no_quiz_root.title("クイズ終了")
     no_quiz_root.attributes('-fullscreen', True)
 
@@ -87,15 +76,15 @@ def show_no_quiz_message():
 
     def back_to_title():
         no_quiz_root.destroy()
-        subprocess.Popen(['python', 'gui/title.py'])
+        from title import open_title_window
+        open_title_window(None)
 
     title_button = tk.Button(no_quiz_root, text="タイトルに戻る", command=back_to_title, font=("Arial", 14))
     title_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
     no_quiz_root.mainloop()
 
-# クイズデータを読み込む
-load_quiz_data('gui/quiz.csv')
+load_quiz_data('quiz.csv')
 
-# クイズウィンドウを作成
-create_quiz_window()
+if __name__ == "__main__":
+    create_window()
