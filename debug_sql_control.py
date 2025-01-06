@@ -3,7 +3,7 @@ from data.table.question import Question
 from data.table.subject import Subject
 from data.table.question import QuestionType
 
-database = SqlAlchemyControl()
+db = SqlAlchemyControl()
 # database.create_table()
 # database.debug.mock_examination(subject_id=7)
 # print(database.read.subject())
@@ -149,3 +149,70 @@ database = SqlAlchemyControl()
 #     print(i)
 # except Exception as e:
 #     print(e)
+
+# choice4を操作
+# data = {
+# "mock_examination_name": "情報ネットワーク 第9回 模擬試験",
+#   "question_list": [
+#    {
+#       "question_sentence": "VRRP (Virtual Router Redundancy Protocol) の主な目的は？",
+#       "choice_1": "IPアドレスの動的な割り当て",
+#       "choice_2": "ルーターの冗長化",
+#       "choice_3": "ネットワークのセキュリティ強化",
+#       "choice_4": "通信品質の制御",
+#       "answer": "2"
+#     },
+#     {
+#       "question_sentence": "IPマルチキャストで利用されるアドレスクラスはどれか？",
+#       "choice_1": "クラスA",
+#       "choice_2": "クラスB",
+#       "choice_3": "クラスC",
+#       "choice_4": "クラスD",
+#       "answer": "4"
+#     }
+#   ]
+# }
+
+# for question in data["question_list"]:
+#     db.insert.question_stack(
+#         question_sentence=question["question_sentence"],
+#         question_type=QuestionType.CHOICE_4,
+#         answer=question["answer"]
+#     )
+
+#     db.insert.choice4_stack(
+#         choice_1=question["choice_1"],
+#         choice_2=question["choice_2"],
+#         choice_3=question["choice_3"],
+#         choice_4=question["choice_4"]
+#     )
+
+# db.insert.mock_examination(
+#     subject_id=1,
+#     mock_examination_name=data["mock_examination_name"],
+# )
+
+# question = db.read.question_by_id(question_id=4)
+# db.update.question_change_type_choice4(
+#     question_id=1,
+#     question_sentence=question.question_sentence,
+#     question_type=QuestionType.CHOICE_4,
+#     answer = "2",
+#     choice_1="ARP",
+#     choice_2="PPP",
+#     choice_3="IP",
+#     choice_4="ICMP"
+# )
+
+# db.delete.question_by_id(question_id=6)
+dlog = ''
+for mock_examination in db.read.mock_examination():
+    dlog += '\n[mock_examination]' + '\n'
+    dlog += f'{mock_examination} \n'
+    for question in db.read.question(mock_examination_id=mock_examination.id):
+        dlog += "\n[question]" + '\n'
+        dlog += f'{question}\n'
+        if question.question_type == QuestionType.CHOICE_4:
+            dlog += "\n[choice4]" + '\n'
+            dlog += f"{db.read.choice4(question_id=question.id)} \n"
+print(dlog)
