@@ -15,17 +15,17 @@ def create_result_window(answer, correct_answer, explanation, root):
 
     def open_title():
         result_root.destroy()
-        from title import open_title_window
+        from gui.title import open_title_window
         open_title_window(None)
 
     def open_review():
         result_root.destroy()
-        from review import create_window
+        from gui.review import create_window
         create_window()
 
     def continue_quiz():
         result_root.destroy()
-        from question import create_window
+        from gui.question import create_window
         create_window()
 
     title_button = tk.Button(result_root, text="タイトルに戻る", command=open_title, font=("Arial", 14))

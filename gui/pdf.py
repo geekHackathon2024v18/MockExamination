@@ -10,7 +10,7 @@ def create_window():
 
     def back_to_title():
         root.destroy()
-        from title import open_title_window
+        from gui.title import open_title_window
         open_title_window(None)
 
     title_button = tk.Button(root, text="タイトルに戻る", command=back_to_title, font=("Arial", 14))

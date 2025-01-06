@@ -1,7 +1,7 @@
 import tkinter as tk
 import csv
 import random
-from result import create_result_window
+from gui.result import create_result_window
 
 quiz_list = []
 answered_quizzes = []
@@ -16,7 +16,7 @@ def load_quiz_data(filename):
         quiz_list = list(reader)
 
     try:
-        with open('answered_quizzes.csv', newline='', encoding='utf-8') as csvfile:
+        with open('gui/answered_quizzes.csv', newline='', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             answered_quizzes = list(reader)
     except FileNotFoundError:
@@ -57,7 +57,7 @@ def submit_answer(root):
     explanation = current_quiz[6]
 
     answered_quizzes.append(current_quiz)
-    with open('answered_quizzes.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('gui/answered_quizzes.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(answered_quizzes)
     
@@ -76,7 +76,7 @@ def show_no_quiz_message(root):
 
     def back_to_title():
         no_quiz_root.destroy()
-        from title import open_title_window
+        from gui.title import open_title_window
         open_title_window(None)
 
     title_button = tk.Button(no_quiz_root, text="タイトルに戻る", command=back_to_title, font=("Arial", 14))
@@ -84,7 +84,7 @@ def show_no_quiz_message(root):
 
     no_quiz_root.mainloop()
 
-load_quiz_data('quiz.csv')
+load_quiz_data('gui/quiz.csv')
 
 if __name__ == "__main__":
     create_window()

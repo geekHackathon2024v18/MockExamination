@@ -13,13 +13,13 @@ def load_answered_quizzes(filename):
     return answered_quizzes
 
 def reset_answered_quizzes(root):
-    answered_quizzes = load_answered_quizzes('answered_quizzes.csv')
+    answered_quizzes = load_answered_quizzes('gui/answered_quizzes.csv')
     
-    with open('quiz.csv', 'a', newline='', encoding='utf-8') as quizfile:
+    with open('gui/quiz.csv', 'a', newline='', encoding='utf-8') as quizfile:
         writer = csv.writer(quizfile)
         writer.writerows(answered_quizzes)
     
-    with open('answered_quizzes.csv', 'w', newline='', encoding='utf-8') as f:
+    with open('gui/answered_quizzes.csv', 'w', newline='', encoding='utf-8') as f:
         pass
     
     reset_message = tk.Label(root, text="解いた問題をリセットしました", font=("Arial", 16), bg="white", fg="black")
@@ -30,7 +30,7 @@ def create_window():
     root.title("復習")
     root.attributes('-fullscreen', True)
 
-    answered_quizzes = load_answered_quizzes('answered_quizzes.csv')
+    answered_quizzes = load_answered_quizzes('gui/answered_quizzes.csv')
 
     if not answered_quizzes:
         no_quizzes_label = tk.Label(root, text="解いた問題がありません", font=("Arial", 50), bg="red", fg="white")
@@ -45,7 +45,7 @@ def create_window():
 
     def open_title():
         root.destroy()
-        from title import open_title_window
+        from gui.title import open_title_window
         open_title_window(None)
 
     title_button = tk.Button(root, text="タイトルに戻る", command=open_title, font=("Arial", 14))
