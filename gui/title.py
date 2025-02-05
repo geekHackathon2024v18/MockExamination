@@ -17,7 +17,7 @@ def open_title_window(prev_root):
     label = tk.Label(root, text="ホーム", font=("Arial", 70), bg="white", fg="black")
     label.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
 
-    btn1 = tk.Button(root, text="pdf読み込み", font=("Arial", 30), bg="white", fg="black", command=lambda: open_window('gui.pdf', root))
+    btn1 = tk.Button(root, text="png読み込み", font=("Arial", 30), bg="white", fg="black", command=lambda: open_window('gui.pdf', root))
     btn1.place(relx=0.2, rely=0.65, anchor=tk.CENTER)
 
     btn2 = tk.Button(root, text="問題", font=("Arial", 30), bg="white", fg="black", command=lambda: open_window('gui.question', root))

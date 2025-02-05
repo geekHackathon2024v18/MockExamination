@@ -1,0 +1,7 @@
+question_sentence,choice_1,choice_2,choice_3,choice_4,answer,explanation
+IDSとは何の略称ですか？,Intrusion Detection System,Intrusion Prevention System,Internet Data System,Information Display System,Intrusion Detection System,IDSはIntrusion Detection System（侵入検知システム）の略称です。
+IPSとは何の略称ですか？,Intrusion Detection System,Intrusion Prevention System,Internet Protocol System,Information Processing System,Intrusion Prevention System,IPSはIntrusion Prevention System（侵入防止システム）の略称です。
+ネットワーク型IDS(NIDS)の機能を説明してください。,特定のホストを監視し、不正なアクセスを検知する。,ネットワークを流れるパケットを監視し、不正な侵入を検知する。,ネットワーク全体のトラフィックを制御する。,ファイルの改ざんを検知する。,ネットワークを流れるパケットを監視し、不正な侵入を検知する。,NIDSはネットワークを流れるすべてのパケットを監視し、不正な侵入を示唆するパターンを検知します。
+ホスト型IDS(HIDS)はどこにインストールして使用しますか？,ルータ,スイッチ,監視対象となるホスト（サーバー）,ファイアウォール,監視対象となるホスト（サーバー）,HIDSは監視対象となるサーバーなどのホストに直接インストールして使用します。
+HIDSの機能として、以下のうちどれが当てはまりますか？,ネットワーク全体のトラフィックを制御する,不正なパケットをブロックする,ファイルの改ざん検知,侵入を自動的にブロックする,ファイルの改ざん検知,HIDSはホスト内部の動作を監視するため、ファイルの改ざん検知などを行うことができます。ただし、IPSのように自動的に侵入をブロックする機能は必ずしも備えていません。
+IPSはIDSの機能に加え、どのような機能を持っていますか？,検知機能のみ,防止機能,ログ収集機能のみ,暗号化機能,防止機能,IPSはIDSの検知機能に加えて、不正なアクティビティを防止する機能を持っています。

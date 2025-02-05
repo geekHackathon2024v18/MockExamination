@@ -63,8 +63,7 @@ def submit_answer(root):
     
     quiz_list.remove(current_quiz)
 
-    root.destroy()  # ウィンドウを閉じる
-    create_result_window(selected_answer, correct_answer, explanation, None)  # 結果画面を表示
+    create_result_window(selected_answer, correct_answer, explanation, root)  # 結果画面を表示
 
 def show_no_quiz_message(root):
     no_quiz_root = tk.Toplevel(root)
@@ -84,7 +83,7 @@ def show_no_quiz_message(root):
 
     no_quiz_root.mainloop()
 
-load_quiz_data('gui/quiz.csv')
+load_quiz_data('quiz.csv')
 
 if __name__ == "__main__":
     create_window()
